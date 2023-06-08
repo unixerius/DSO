@@ -1,0 +1,119 @@
+variables:
+  # Used for container names and for webapp URLs
+  - name: 'team'
+    value: 'team1'
+  # DO NOT CHANGE THE FOLLOWING VARIABLES.
+  # ONLY CHANGE YOUR TEAM NAME, ABOVE HERE...
+  # Used to refer to AzDO service connection and to actual registry.
+  - name: 'registry'
+    value: 'unixeriusdso'
+  # Used for the WebApp Service
+  - name: 'webapp'
+    value: 'unixeriusdso-${{ variables.team }}'
+  # Used to deploy resources to Azure
+  - name: 'azuresub'
+    value: 'Azure Unixerius Learning'
+  # Should be re-defined in the DTAP phases / stages
+  - name: 'dtap'
+    value: 'dev'
+
+trigger:
+  - manual
+    
+pool:
+  vmImage: ubuntu-latest
+
+
+stages:
+- stage: sca
+  condition: eq(variables['Build.SourceBranch'], 'refs/heads/dev')
+  jobs:
+  - job: npm_audit_sca
+    steps:
+    - task: Bash@3
+      continueOnError: true          # Informative only.
+      inputs:
+        targetType: 'inline'
+        script: |
+          npm install
+          #npm install --package-lock-only
+          npm audit --json | tee npm-audit-result.json
+        workingDirectory: '$(Build.SourcesDirectory)'
+        failOnStderr: true
+    - publish: '$(Build.SourcesDirectory)/npm-audit-result.json'
+      artifact: npm-audit-result.json
+  
+  - job: osv_scanner_sca
+    steps:
+    - task: Bash@3
+      name: install_OSV
+      continueOnError: true          # Informative only.
+      inputs:
+        targetType: 'inline'
+        script: |
+          echo "Getting the NPM lock files."
+          npm install
+          #npm install --package-lock-only
+
+          echo "Getting and running OSV Scan."
+          wget https://github.com/google/osv-scanner/releases/download/v1.1.0/osv-scanner_1.1.0_linux_amd64
+          chmod +x osv-scanner_1.1.0_linux_amd64
+        workingDirectory: '$(Build.SourcesDirectory)'
+        failOnStderr: false          # The tool is noisy, don't fail on stderr
+    - task: Bash@3
+      name: run_OSV
+      continueOnError: true          # Informative only.
+      inputs:
+        targetType: 'inline'
+        script: |
+          ./osv-scanner_1.1.0_linux_amd64 --json -r ${PWD} > osv-scanner.json
+        workingDirectory: '$(Build.SourcesDirectory)'
+        failOnStderr: false          # The tool is noisy, don't fail on stderr
+    - publish: '$(Build.SourcesDirectory)/osv-scanner.json'
+      artifact: osv-scanner.json
+
+- stage: build
+  condition: always()
+  jobs:        
+  - job: build_and_push_image
+    steps:
+    - task: Docker@2
+      inputs:
+        containerRegistry: ${{ variables.registry }}
+        command: 'login'
+    - task: Docker@2
+      inputs:
+        containerRegistry: ${{ variables.registry }}
+        repository: ${{ variables.team }}
+        command: 'buildAndPush'
+        Dockerfile: '**/Dockerfile'
+        tags: ${{ variables.dtap }}
+    - task: Docker@2
+      inputs:
+        containerRegistry: ${{ variables.registry }}
+        command: 'logout'
+
+
+- stage: run_webapp
+  dependsOn:
+  - build
+  condition: always()
+
+  jobs:
+  - job: update_appsvc_dev
+    steps:
+    - task: AzureWebAppContainer@1
+      displayName: update_webapp
+      inputs:
+        azureSubscription: ${{ variables.azuresub }}
+        appName: ${{ variables.webapp }}
+        containers: '${{ variables.registry }}.azurecr.io/${{ variables.team }}:${{ variables.dtap }}'
+        appSettings: '-Port 3000 -WEBSITES_PORT 3000'
+        configurationStrings: '-acrUseManagedIdentityCreds true'
+    
+    # Sleeping for five minutes. I have seen the restart take 10-12 minutes.
+    - task: Bash@3
+      displayName: sleep_and_wait
+      inputs:
+        targetType: 'inline'
+        script: 'sleep 300'

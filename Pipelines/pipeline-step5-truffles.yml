@@ -1,0 +1,155 @@
+variables:
+  # Used for container names and for webapp URLs
+  - name: 'team'
+    value: 'team1'
+  # DO NOT CHANGE THE FOLLOWING VARIABLES.
+  # ONLY CHANGE YOUR TEAM NAME, ABOVE HERE...
+  # Used to refer to AzDO service connection and to actual registry.
+  - name: 'registry'
+    value: 'unixeriusdso'
+  # Used for the WebApp Service
+  - name: 'webapp'
+    value: 'unixeriusdso-${{ variables.team }}'
+  # Used to deploy resources to Azure
+  - name: 'azuresub'
+    value: 'Azure Unixerius Learning'
+  # Should be re-defined in the DTAP phases / stages
+  - name: 'dtap'
+    value: 'dev'
+
+trigger:
+  - manual
+    
+pool:
+  vmImage: ubuntu-latest
+
+
+stages:
+- stage: SCA
+  condition: eq(variables['Build.SourceBranch'], 'refs/heads/dev')
+  jobs:
+  - job: npm_audit_sca
+    steps:
+    - task: NodeTool@0
+      displayName: 'Install Node.js'
+      inputs:
+        versionSpec: '16.x'
+    - task: Bash@3
+      continueOnError: true          # We do not want to "break the build".
+      inputs:
+        targetType: 'inline'
+        script: |
+          npm install
+          npm audit --json | tee npm-audit-result.json
+        workingDirectory: '$(Build.SourcesDirectory)'
+        failOnStderr: true
+    - publish: '$(Build.SourcesDirectory)/npm-audit-result.json'
+      artifact: npm-audit-result.json
+
+- stage: SAST
+  condition: eq(variables['Build.SourceBranch'], 'refs/heads/test')
+  jobs:
+  - job: semgrep_sast
+    steps:
+    - task: Bash@3
+      displayName: install_semgrep
+      inputs:
+        targetType: 'inline'
+        workingDirectory: '$(Build.SourcesDirectory)'
+        failOnStderr: true
+        script: |
+          python3 -m pip install semgrep
+    - task: Bash@3
+      continueOnError: true          # We do not want to "break the build".
+      displayName: run_semgrep
+      inputs:
+        targetType: 'inline'
+        workingDirectory: '$(Build.SourcesDirectory)'
+        failOnStderr: true
+        script: |
+          semgrep --sarif --output semgrep-result.sarif --config auto
+    - task: PublishBuildArtifacts@1
+      inputs:
+        PathtoPublish: '$(Build.SourcesDirectory)/semgrep-result.sarif'
+        ArtifactName: 'CodeAnalysisLogs'
+        publishLocation: 'Container'
+  
+  - job: TruffleHog
+    steps:
+    - task: Bash@3
+      continueOnError: true          # We do not want to "break the build".
+      displayName: run_trufflehog
+      inputs:
+        targetType: 'inline'
+        workingDirectory: '$(Build.SourcesDirectory)'
+        script: |
+          docker run -v "$(pwd):/pwd" trufflesecurity/trufflehog filesystem --directory=/pwd --no-verification --json --fail | tee trufflehog-result.json
+
+    - publish: '$(Build.SourcesDirectory)/trufflehog-result.json'
+      artifact: trufflehog-result.json
+
+- stage: build
+  condition: always()
+  jobs: 
+  - job: build_and_push_image
+    steps:
+    - task: Docker@2
+      inputs:
+        containerRegistry: ${{ variables.registry }}
+        command: 'login'
+    - task: Docker@2
+      inputs:
+        containerRegistry: ${{ variables.registry }}
+        repository: ${{ variables.team }}
+        command: 'buildAndPush'
+        Dockerfile: '**/Dockerfile'
+        tags: ${{ variables.dtap }}
+    - task: Docker@2
+      inputs:
+        containerRegistry: ${{ variables.registry }}
+        command: 'logout'
+
+#- stage: trivy
+#  condition: eq(variables['Build.SourceBranch'], 'refs/heads/dev')
+#  jobs:
+#  - job: install_and_run
+#    steps:
+    - task: Bash@3
+      displayName: install_trivy
+      inputs:
+        targetType: 'inline'
+        script: |
+          wget https://github.com/aquasecurity/trivy/releases/download/v0.18.3/trivy_0.18.3_Linux-64bit.deb
+          sudo dpkg -i trivy_0.18.3_Linux-64bit.deb
+    - task: Bash@3
+      displayName: run_trivy
+      inputs:
+        targetType: 'inline'
+        script: |
+          trivy image -f json -o trivy-result.json '${{ variables.registry }}.azurecr.io/${{ variables.team }}:${{ variables.dtap }}'
+    - publish: './trivy-result.json'
+      artifact: trivy-result.json    
+
+- stage: run_webapp
+  dependsOn:
+  - build
+  condition: always()
+
+  jobs:
+  - job: update_appsvc_dev
+    steps:
+    - task: AzureWebAppContainer@1
+      displayName: update_webapp
+      inputs:
+        azureSubscription: ${{ variables.azuresub }}
+        appName: ${{ variables.webapp }}
+        containers: '${{ variables.registry }}.azurecr.io/${{ variables.team }}:${{ variables.dtap }}'
+        appSettings: '-Port 3000 -WEBSITES_PORT 3000'
+        configurationStrings: '-acrUseManagedIdentityCreds true'
+    
+    # Sleeping for five minutes. I have seen the restart take 10-12 minutes.
+    - task: Bash@3
+      displayName: sleep_and_wait
+      inputs:
+        targetType: 'inline'
+        script: 'sleep 300'
