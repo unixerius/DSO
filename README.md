@@ -47,6 +47,8 @@ Students with a modern Macintosh computer with Apple Silicon processor have two 
 7. On the VM, run `sudo -i`, then `cd` into the cloned repo, into the "Lab setup" directory.
 8. As root, run the `provision-vm.sh` script. This will install and configure all needed tools.
 
+The installation/provisioning will require 10-20 minutes, depending on your Internet connection speed.
+
 You can choose to work on the VM via the UTM graphical interface, or you can SSH into the server from your laptop's host OS. UTM VMs are directly accessible from the host OS, all you need to know is the IP.
 
 
