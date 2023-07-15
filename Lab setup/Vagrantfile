@@ -35,7 +35,7 @@ npm install -g pnpm
 npm install --location=global @angular/cli@latest
 
 # Installing Chromium, for headless testing.
-sudo apt-get install chromium-browser 
+apt install -y chromium-browser 
 echo "export CHROME_BIN=\"/snap/bin/chromium\"" >> /etc/bash.bashrc
 echo "export CHROME_BIN=\"/snap/bin/chromium\"" >> /etc/profile
 
@@ -50,11 +50,11 @@ export AZ_REPO=$(lsb_release -cs)
 echo "deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ $AZ_REPO main" |
     tee /etc/apt/sources.list.d/azure-cli.list
 
-sudo apt-get update
-sudo apt-get install azure-cli
+apt update
+apt install -y azure-cli
 
 # Setting up and starting Docker.
-sudo usermod -a -G docker vagrant
+usermod -a -G docker vagrant
 systemctl enable docker
 systemctl start docker
 docker pull hello-world
