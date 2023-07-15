@@ -39,7 +39,7 @@ Students with a modern Macintosh computer with Apple Silicon processor have two 
 ### Apple Silicon - UTM
 
 1. [Download and install UTM.](https://mac.getutm.app)
-2. [Download and install Ubuntu Server 22.04 for aarch64](https://cdimage.ubuntu.com/releases/22.04/release/ubuntu-22.04.2-live-server-arm64.iso)
+2. [Download the Live ISO for Ubuntu Server 22.04 for aarch64](https://cdimage.ubuntu.com/releases/22.04/release/ubuntu-22.04.2-live-server-arm64.iso)
 3. In UTM, define a Linux VM with 6-8 cores and 6144-8192 MB of RAM (depending on the amount of RAM in your system).
 4. Install Ubuntu Server onto the newly defined Linux VM. I can't help you with that! 🥸
 5. Once the installation is done, login to the VM.
