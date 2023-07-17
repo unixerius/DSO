@@ -40,7 +40,7 @@ Students with a modern Macintosh computer with Apple Silicon processor have two 
 
 **Note:**
 
-> On Apple Silicon and other ARM-based systems, certain labs will not work. Most notably, the Nessus vulnerability scanner only works on x86_64. The Selenium labs also will not work, yet (I need to replace the Chrome containers).
+> On Apple Silicon and other ARM-based systems, certain labs will not work. Most notably, the Nessus vulnerability scanner only works on x86_64. 
 
 
 ### Apple Silicon - UTM
