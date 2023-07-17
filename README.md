@@ -40,7 +40,7 @@ Students with a modern Macintosh computer with Apple Silicon processor have two 
 
 **Note:**
 
-> On Apple Silicon and other ARM-based systems, certain labs will not work. Most notably, the Nessus vulnerability scanner only works on x86_64. 
+> On Apple Silicon and other ARM-based systems, certain labs will not work. Most notably, the Nessus vulnerability scanner only works on x86_64. The lab with Juice Shop Solver is also broken on ARM, for now. Fix will come soon.
 
 
 ### Apple Silicon - UTM
