@@ -14,7 +14,7 @@ tar zxvf ~/apache-maven-3.8.8-bin.tar.gz
 ln -s apache-maven-3.8.8 /opt/maven
 cd ~; rm apache-maven*.tar.gz
 
-echo 'export JAVA_HOME="/usr/lib/jvm/java-17-openjdk-amd64/"' > /etc/profile.d/maven.sh
+echo 'export JAVA_HOME="/usr/lib/jvm/java-17-openjdk-arm64/"' > /etc/profile.d/maven.sh
 echo 'export M2_HOME="/opt/maven"' >> /etc/profile.d/maven.sh
 echo 'export MAVEN_HOME="/opt/maven"' >> /etc/profile.d/maven.sh
 echo 'export PATH="${M2_HOME}/bin:${PATH}"' >> /etc/profile.d/maven.sh
