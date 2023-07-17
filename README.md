@@ -36,6 +36,13 @@ Students with a modern Macintosh computer with Apple Silicon processor have two 
 **Recommendation**: Despite that it's a bit harder to setup, I recommend using the UTM approach. Yes you will need to manually install Ubuntu, but the performance is great!
 
 
+### Broken labs (ARM)
+
+**Note:**
+
+> On Apple Silicon and other ARM-based systems, certain labs will not work. Most notably, the Nessus vulnerability scanner only works on x86_64.
+
+
 ### Apple Silicon - UTM
 
 1. [Download and install UTM.](https://mac.getutm.app)
