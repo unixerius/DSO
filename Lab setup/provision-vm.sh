@@ -6,6 +6,7 @@
 echo "192.168.56.11   devsecops" >> /etc/hosts
 
 # Setting up graphical environment
+apt update
 apt install -y ubuntu-desktop
 systemctl set-default graphical.target
 systemctl isolate multi-user.target
