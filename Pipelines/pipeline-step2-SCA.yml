@@ -81,13 +81,19 @@ stages:
       inputs:
         containerRegistry: ${{ variables.registry }}
         command: 'login'
-    - task: Docker@2
+    #- task: Docker@2
+    #  inputs:
+    #    containerRegistry: ${{ variables.registry }}
+    #    repository: ${{ variables.team }}
+    #    command: 'buildAndPush'
+    #    Dockerfile: '**/Dockerfile'
+    #    tags: ${{ variables.dtap }}
+    - task: Bash@3
       inputs:
-        containerRegistry: ${{ variables.registry }}
-        repository: ${{ variables.team }}
-        command: 'buildAndPush'
-        Dockerfile: '**/Dockerfile'
-        tags: ${{ variables.dtap }}
+        targetType: 'inline'
+        script: |
+          echo "This is where we normally would run Docker buildAndPush."
+          echo "For now we have to fake this."
     - task: Docker@2
       inputs:
         containerRegistry: ${{ variables.registry }}
@@ -107,7 +113,8 @@ stages:
       inputs:
         azureSubscription: ${{ variables.azuresub }}
         appName: ${{ variables.webapp }}
-        containers: '${{ variables.registry }}.azurecr.io/${{ variables.team }}:${{ variables.dtap }}'
+        #containers: '${{ variables.registry }}.azurecr.io/${{ variables.team }}:${{ variables.dtap }}'
+        containers: 'bkimminich/juice-shop'
         appSettings: '-Port 3000 -WEBSITES_PORT 3000'
         configurationStrings: '-acrUseManagedIdentityCreds true'
     
