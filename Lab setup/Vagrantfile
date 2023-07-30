@@ -5,6 +5,10 @@ echo "192.168.56.11   devsecops" >> /etc/hosts
 apt update
 apt install -y docker.io docker-compose git ripgrep pip python3
 
+which docker >/dev/null 2>&1
+if [[ $? -ne 0 ]]; 
+then echo "FAILURE: Docker install failed."; exit 1; fi 
+
 # Setting up Java and Maven, for Selenium
 apt install -y openjdk-17-jdk
 cd ~
@@ -21,12 +25,19 @@ echo 'export PATH="${M2_HOME}/bin:${PATH}"' >> /etc/profile.d/maven.sh
 
 chmod +x /etc/profile.d/maven.sh
 
+. /etc/profile.d/maven.sh
+which mvn >/dev/null 2>&1 
+if [[ $? -ne 0 ]];
+then echo "FAILURE: Maven install failed."; exit 1; fi
+
 # Installing NodeJS from outside sources.
 curl -fsSL https://deb.nodesource.com/setup_16.x | sudo -E bash -
 apt update
 apt install -y nodejs      # Fetching NodeJS 16 from NodeSource
 
 echo "NODE INSTALLED: $(node --version)"
+if [[ $(node --version | cut -d. -f1) != "v16" ]]
+then echo "FAILURE: wrong Node version."; exit 1; fi 
 
 # Installing alternative and faster NodeJS package manager
 npm install -g pnpm
@@ -39,25 +50,14 @@ apt install -y chromium-browser
 echo "export CHROME_BIN=\"/snap/bin/chromium\"" >> /etc/bash.bashrc
 echo "export CHROME_BIN=\"/snap/bin/chromium\"" >> /etc/profile
 
-# Installing Azure CLI
-apt install -y ca-certificates curl apt-transport-https lsb-release gnupg
-
-curl -sL https://packages.microsoft.com/keys/microsoft.asc |
-    gpg --dearmor |
-    tee /etc/apt/trusted.gpg.d/microsoft.gpg > /dev/null
-
-export AZ_REPO=$(lsb_release -cs)
-echo "deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ $AZ_REPO main" |
-    tee /etc/apt/sources.list.d/azure-cli.list
-
-apt update
-apt install -y azure-cli
-
 # Setting up and starting Docker.
 usermod -a -G docker vagrant
 systemctl enable docker
 systemctl start docker
 docker pull hello-world
+
+if [[ $? -ne 0 ]];
+then echo "FAILURE: Docker pullfailed."; exit 1; fi
 
 # Pulling images needed for Selenium labs
 docker pull selenium/node-chrome
@@ -72,6 +72,9 @@ docker pull ghcr.io/google/osv-scanner:latest
 # Pulling Nessus image for day 5
 docker pull tenableofficial/nessus
 
+# Pulling zap2docker and Nuclei, which are big too
+docker pull owasp/zap2docker-stable
+docker pull projectdiscovery/nuclei
 
 SCRIPT
 
