@@ -96,8 +96,8 @@ Vagrant.configure("2") do |config|
     end
 
     devsecops.vm.provider "virtualbox" do |v|
-      v.memory = 8192
-      v.cpus = 6
+      v.memory = 4096          # Change to 8192 if possible
+      v.cpus = 4               # Change to 6 if possible
     end
     devsecops.vm.provision "setup", type: "shell", inline: $script
   end

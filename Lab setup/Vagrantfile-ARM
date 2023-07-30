@@ -90,8 +90,10 @@ Vagrant.configure("2") do |config|
     end
 
     devsecops.vm.provider "qemu" do |v|
-      v.memory = 8192
-      v.smp = "cpus=8,sockets=2,cores=2,threads=2"
+      v.memory = 4096           # Change to 8192 if possible
+      # Switch between these two, if you have enough CPU cores.
+      v.smp = "cpus=4,sockets=1,cores=2,threads=2"
+      #v.smp = "cpus=8,sockets=2,cores=2,threads=2"
     end
     #devsecops.vm.provision "setup", type: "shell", inline: $script
   end
