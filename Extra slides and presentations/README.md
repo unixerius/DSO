@@ -4,5 +4,5 @@ This directory contains mini-trainings and presentations which Tess gives at cus
 
 There are also YouTube recordings of two of these presentations:
 
-* [Introduction to cryptography, certificates and PKI.](https://www.youtube.com/watch?v=p1ViwiXA-K)
+* [Introduction to cryptography, certificates and PKI.](https://www.youtube.com/watch?v=p1ViwiXA-Kk)
 * [Implementing an AppSec program.](https://www.youtube.com/watch?v=bxYAiVKSL0A)
