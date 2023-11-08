@@ -31,7 +31,8 @@ if [[ $? -ne 0 ]];
 then echo "FAILURE: Maven install failed."; exit 1; fi
 
 # Installing NodeJS from outside sources.
-curl -fsSL https://deb.nodesource.com/setup_16.x | sudo -E bash -
+curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg
+echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_16.x nodistro main" > /etc/apt/sources.list.d/nodesource.list
 apt update
 apt install -y nodejs      # Fetching NodeJS 16 from NodeSource
 
