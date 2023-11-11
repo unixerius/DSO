@@ -98,7 +98,8 @@ Vagrant.configure("2") do |config|
       v.smp = "cpus=4,sockets=1,cores=2,threads=2"
       #v.smp = "cpus=8,sockets=2,cores=2,threads=2"
     end
-    #devsecops.vm.provision "setup", type: "shell", inline: $script
+    
+    devsecops.vm.provision "setup", type: "shell", inline: $script
   end
 
 end
