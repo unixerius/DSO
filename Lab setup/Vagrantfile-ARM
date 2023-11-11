@@ -61,10 +61,9 @@ if [[ $? -ne 0 ]];
 then echo "FAILURE: Docker pullfailed."; exit 1; fi
 
 # Pulling images needed for Selenium labs
-docker pull selenium/node-chrome
-docker pull selenium/node-edge
-docker pull selenium/node-firefox
-docker pull selenium/hub
+docker pull seleniarm/node-chromium
+docker pull seleniarm/node-firefox
+docker pull seleniarm/hub
 docker pull bkimminich/juice-shop
 
 # Pulling image for SCA with OSV Scanner
