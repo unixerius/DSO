@@ -52,7 +52,7 @@ Students with a modern Macintosh computer with Apple Silicon processor have two 
 5. Once the installation is done, login to the VM.
 6. In your home directory on the VM, run: `git clone https://github.com/unixerius/dso`
 7. On the VM, run `sudo -i`, then `cd` into the cloned repo, into the "Lab setup" directory.
-8. As root, run the `provision-vm.sh` script. This will install and configure all needed tools.
+8. As root, run the `provision-vm-ARM.sh` script. This will install and configure all needed tools.
 
 The installation/provisioning will require 10-20 minutes, depending on your Internet connection speed.
 
