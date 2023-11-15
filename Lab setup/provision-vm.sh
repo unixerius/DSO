@@ -75,7 +75,9 @@ docker pull bkimminich/juice-shop:v15.0.0
 docker pull ghcr.io/google/osv-scanner:latest
 
 # Pulling Nessus image for day 5
-docker pull tenableofficial/nessus
+docker pull tenable/nessus
+mkdir ${HOME}/Nessus
+curl --request GET --url "https://raw.githubusercontent.com/unixerius/DSO/main/Nessus/nessus-docker-compose.yml" --output "${HOME}/Nessus/docker-compose.yml" 
 
 # Pulling zap2docker and Nuclei, which are big too
 docker pull owasp/zap2docker-stable
