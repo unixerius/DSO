@@ -74,8 +74,9 @@ docker pull bkimminich/juice-shop
 docker pull ghcr.io/google/osv-scanner:latest
 
 # Building Nessus container for ARM
-curl --request GET --url 'https://raw.githubusercontent.com/unixerius/DSO/main/Nessus/nessus-docker-arm' --output '/tmp/nessus-docker-arm'
-docker buildx build -t nessus -f /tmp/nessus-docker-arm /tmp
+mkdir ~/nessus
+curl --request GET --url 'https://raw.githubusercontent.com/unixerius/DSO/main/Nessus/nessus-docker-arm' --output '~/nessus/nessus-docker-arm'
+docker build -t nessus -f ~/nessus/nessus-docker-arm ~/nessus/
 
 # Pulling zap2docker and Nuclei, which are big too
 docker pull owasp/zap2docker-stable
