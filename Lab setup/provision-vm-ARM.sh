@@ -73,8 +73,9 @@ docker pull bkimminich/juice-shop
 # Pulling image for SCA with OSV Scanner
 docker pull ghcr.io/google/osv-scanner:latest
 
-# Pulling Nessus image for day 5
-docker pull tenableofficial/nessus
+# Building Nessus container for ARM
+curl --request GET --url 'https://raw.githubusercontent.com/unixerius/DSO/main/Nessus/nessus-docker-arm' --output '/tmp/nessus-docker-arm'
+docker buildx build -t nessus -f /tmp/nessusdocker-arm /tmp
 
 # Pulling zap2docker and Nuclei, which are big too
 docker pull owasp/zap2docker-stable
