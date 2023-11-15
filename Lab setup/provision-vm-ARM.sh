@@ -75,7 +75,7 @@ docker pull ghcr.io/google/osv-scanner:latest
 
 # Building Nessus container for ARM
 mkdir ~/nessus
-curl --request GET --url 'https://raw.githubusercontent.com/unixerius/DSO/main/Nessus/nessus-docker-arm' --output '~/nessus/nessus-docker-arm'
+curl --request GET --url "https://raw.githubusercontent.com/unixerius/DSO/main/Nessus/nessus-docker-arm" --output "~/nessus/nessus-docker-arm"
 docker build -t nessus -f ~/nessus/nessus-docker-arm ~/nessus/
 
 # Pulling zap2docker and Nuclei, which are big too
