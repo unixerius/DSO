@@ -83,13 +83,12 @@ stages:
         targetType: 'inline'
         workingDirectory: '$(Build.SourcesDirectory)'
         script: |
-          mkdir report; chmod 777 report     # Allows Docker to write the report.
-          docker run -v "$(pwd):/pwd" zricethezav/gitleaks detect \
+          docker run --user ${UID}:${GID} -v "$(pwd):/pwd" zricethezav/gitleaks detect \
           --source="/pwd" \
           --redact \
-          --report-path /pwd/report/gitleaks-result.json
+          --report-path /pwd/gitleaks-result.json
 
-    - publish: '$(Build.SourcesDirectory)/report/gitleaks-result.json'
+    - publish: '$(Build.SourcesDirectory)/gitleaks-result.json'
       artifact: gitleaks-result.json
 
 - stage: build
