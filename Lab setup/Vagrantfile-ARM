@@ -79,12 +79,20 @@ docker pull owasp/zap2docker-stable
 docker pull projectdiscovery/nuclei
 
 SCRIPT
+###
+# End of provisioning script
+
+# Install vagrant-disksize to allow resizing the vagrant box disk.
+unless Vagrant.has_plugin?("vagrant-disksize")
+    raise  Vagrant::Errors::VagrantError.new, "vagrant-disksize plugin is missing. Please install it using 'vagrant plugin install vagrant-disksize' and rerun 'vagrant up'"
+end
 
 Vagrant.configure("2") do |config|
 
   config.vm.define :devsecops do |devsecops|
     devsecops.vm.hostname = "devsecops"
     devsecops.vm.box = "perk/ubuntu-2204-arm64"
+    devsecops.disksize.size = '50GB'
 
     devsecops.vm.network "forwarded_port", guest: 3000, host: 3000
     devsecops.vm.network "forwarded_port", guest: 4444, host: 4444
