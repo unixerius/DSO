@@ -79,6 +79,9 @@ docker pull owasp/zap2docker-stable
 docker pull projectdiscovery/nuclei
 
 SCRIPT
+###
+# End of provisioning script
+
 
 Vagrant.configure("2") do |config|
 

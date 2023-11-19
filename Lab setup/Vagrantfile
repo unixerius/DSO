@@ -1,6 +1,9 @@
 $script = <<-SCRIPT
 echo "192.168.56.11   devsecops" >> /etc/hosts
 
+# Growing the root file system
+lvresize -r -l +40%VG /dev/ubuntu-vg/ubuntu-lv
+
 # Installing pre-requisite software
 apt update
 apt install -y docker.io docker-compose git ripgrep pip python3
@@ -80,6 +83,9 @@ docker pull owasp/zap2docker-stable
 docker pull projectdiscovery/nuclei
 
 SCRIPT
+###
+# End of provisioning script
+
 
 Vagrant.configure("2") do |config|
 
