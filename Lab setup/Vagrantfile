@@ -1,6 +1,9 @@
 $script = <<-SCRIPT
 echo "192.168.56.11   devsecops" >> /etc/hosts
 
+# Growing the root file system
+lvresize -r -l +40%VG /dev/ubuntu-vg/ubuntu-lv
+
 # Installing pre-requisite software
 apt update
 apt install -y docker.io docker-compose git ripgrep pip python3
@@ -83,10 +86,6 @@ SCRIPT
 ###
 # End of provisioning script
 
-# Install vagrant-disksize to allow resizing the vagrant box disk.
-unless Vagrant.has_plugin?("vagrant-disksize")
-    raise  Vagrant::Errors::VagrantError.new, "vagrant-disksize plugin is missing. Please install it using 'vagrant plugin install vagrant-disksize' and rerun 'vagrant up'"
-end
 
 Vagrant.configure("2") do |config|
 
@@ -94,8 +93,6 @@ Vagrant.configure("2") do |config|
     devsecops.vm.hostname = "devsecops"
     #devsecops.vm.box = "bento/ubuntu-20.04"    # This was the original
     devsecops.vm.box = "bento/ubuntu-22.04"
-    devsecops.disksize.size = '50GB'
-
 
     # Switch these two, if VirtualBox complains about "permission denied" on networking.
     devsecops.vm.network "private_network", ip: "192.168.56.11", virtualbox__intnet: "dsonet"
