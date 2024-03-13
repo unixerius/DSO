@@ -75,3 +75,7 @@ The building and installing of the VM will take 20-30 minutes, depending on your
 
 After the installation is complete, you can login to the VM with `vagrant ssh` and you can shut it down with `vagrant halt`. Later you can start it up with `vagrant up` again.
 
+
+# License
+
+We've decided to offer these files under the Creative Commons, BY-NC-SA license: Non-Commercial, Attribution and Share Alike. You can read all about it in the LICENSE.txt file. Basically: you can re-use these files as you see fit but not for commercial purposes, as long as you attribute us as the original source and you re-share your own modifications. 
