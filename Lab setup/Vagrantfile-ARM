@@ -3,7 +3,7 @@ echo "192.168.56.11   devsecops" >> /etc/hosts
 
 # Installing pre-requisite software
 apt update
-apt install -y docker.io docker-compose git ripgrep pip python3
+apt install -y docker.io docker-buildx docker-compose git ripgrep pip python3
 
 which docker >/dev/null 2>&1 
 if [[ $? -ne 0 ]];
@@ -40,11 +40,8 @@ echo "NODE INSTALLED: $(node --version)"
 if [[ $(node --version | cut -d. -f1) != "v16" ]]
 then echo "FAILURE: wrong Node version."; exit 1; fi
 
-# Installing alternative and faster NodeJS package manager
-npm install -g pnpm
-
 # Installing Angular
-npm install --location=global @angular/cli@latest
+npm install --location=global @angular/cli@16.2.14
 
 # Installing Chromium, for headless testing.
 apt install -y chromium-browser 
@@ -64,10 +61,22 @@ then echo "FAILURE: Docker pullfailed."; exit 1; fi
 docker pull seleniarm/node-chromium
 docker pull seleniarm/node-firefox
 docker pull seleniarm/hub
-docker pull bkimminich/juice-shop
+docker pull bkimminich/juice-shop:v15.0.0
 
 # Pulling image for SCA with OSV Scanner
 docker pull ghcr.io/google/osv-scanner:latest
+
+# Prepping Docker BuildX
+# From here https://gist.github.com/jniltinho/bcb28a99aef33dcb5f35c297bf71e4ae
+VERSION=v0.14.1
+mkdir -p $HOME/.docker/cli-plugins
+wget https://github.com/docker/buildx/releases/download/$VERSION/buildx-$VERSION.linux-arm64 -O $HOME/.docker/cli-plugins/docker-buildx
+chmod +x $HOME/.docker/cli-plugins/docker-buildx
+
+export DOCKER_BUILDKIT=1
+export COMPOSE_DOCKER_CLI_BUILD=1
+echo 'export DOCKER_BUILDKIT=1
+export COMPOSE_DOCKER_CLI_BUILD=1' >> $HOME/.profile
 
 # Building Nessus container for ARM
 mkdir ${HOME}/nessus
@@ -75,7 +84,7 @@ curl --request GET --url "https://raw.githubusercontent.com/unixerius/DSO/main/N
 docker build -t nessus -f ${HOME}/nessus/nessus-docker-arm ${HOME}/nessus/
 
 # Pulling zap2docker and Nuclei, which are big too
-docker pull owasp/zap2docker-stable
+docker pull ghcr.io/zaproxy/zaproxy:latest
 docker pull projectdiscovery/nuclei
 
 SCRIPT
