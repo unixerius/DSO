@@ -7,7 +7,7 @@ echo "192.168.56.11   devsecops" >> /etc/hosts
 
 # Installing pre-requisite software
 apt update
-apt install -y docker.io docker-compose git ripgrep pip python3
+apt install -y docker.io docker-buildx docker-compose git ripgrep pip python3
 
 which docker >/dev/null 2>&1 
 if [[ $? -ne 0 ]];
@@ -44,11 +44,8 @@ echo "NODE INSTALLED: $(node --version)"
 if [[ $(node --version | cut -d. -f1) != "v16" ]]
 then echo "FAILURE: wrong Node version."; exit 1; fi
 
-# Installing alternative and faster NodeJS package manager
-npm install -g pnpm
-
 # Installing Angular
-npm install --location=global @angular/cli@latest
+npm install --location=global @angular/cli@16.2.14
 
 # Installing Chromium, for headless testing.
 apt install -y chromium-browser 
@@ -80,6 +77,6 @@ mkdir ${HOME}/Nessus
 curl --request GET --url "https://raw.githubusercontent.com/unixerius/DSO/main/Nessus/nessus-docker-compose.yml" --output "${HOME}/Nessus/docker-compose.yml" 
 
 # Pulling zap2docker and Nuclei, which are big too
-docker pull owasp/zap2docker-stable
+docker pull ghcr.io/zaproxy/zaproxy:latest
 docker pull projectdiscovery/nuclei
  
