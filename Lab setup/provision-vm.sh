@@ -54,7 +54,7 @@ echo "export CHROME_BIN=\"/snap/bin/chromium\"" >> /etc/profile
 
 # Setting up and starting Docker.
 # This assumes that you did a "su" or "sudo -i" to become root.
-usermod -a -G docker $(who -s am i | cut -d" " -f1)
+usermod -a -G docker $(who am i | cut -d" " -f1)
 systemctl enable docker
 systemctl start docker
 docker pull hello-world
