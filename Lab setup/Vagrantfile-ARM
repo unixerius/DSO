@@ -75,8 +75,8 @@ chmod +x $HOME/.docker/cli-plugins/docker-buildx
 
 export DOCKER_BUILDKIT=1
 export COMPOSE_DOCKER_CLI_BUILD=1
-echo 'export DOCKER_BUILDKIT=1
-export COMPOSE_DOCKER_CLI_BUILD=1' >> $HOME/.profile
+echo 'export DOCKER_BUILDKIT=1' >> $HOME/.profile
+echo 'export COMPOSE_DOCKER_CLI_BUILD=1' >> $HOME/.profile
 
 # Building Nessus container for ARM
 mkdir ${HOME}/nessus
@@ -107,7 +107,7 @@ Vagrant.configure("2") do |config|
     end
 
     devsecops.vm.provider "qemu" do |v|
-      v.memory = 4096           # Change to 8192 if possible
+      v.memory = 4096           # Change to 6144, or 8192 if possible
       # Switch between these two, if you have enough CPU cores.
       v.smp = "cpus=4,sockets=1,cores=2,threads=2"
       #v.smp = "cpus=8,sockets=2,cores=2,threads=2"
