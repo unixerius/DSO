@@ -54,7 +54,7 @@ echo "export CHROME_BIN=\"/snap/bin/chromium\"" >> /etc/profile
 
 # Setting up and starting Docker.
 # This assumes that you did a "su" or "sudo -i" to become root.
-usermod -a -G docker $(who -s am i | cut -d" " -f1)
+usermod -a -G docker $(who am i | cut -d" " -f1)
 systemctl enable docker
 systemctl start docker
 docker pull hello-world
@@ -72,7 +72,7 @@ docker pull bkimminich/juice-shop:v15.0.0
 docker pull ghcr.io/google/osv-scanner:latest
 
 # Pulling Nessus image for day 5
-docker pull tenable/nessus
+docker pull tenable/nessus:latest-ubuntu
 mkdir ${HOME}/Nessus
 curl --request GET --url "https://raw.githubusercontent.com/unixerius/DSO/main/Nessus/nessus-docker-compose.yml" --output "${HOME}/Nessus/docker-compose.yml" 
 
