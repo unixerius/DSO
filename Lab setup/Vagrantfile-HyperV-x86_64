@@ -1,6 +1,8 @@
 $script = <<-SCRIPT
 echo "192.168.56.11   devsecops" >> /etc/hosts
 
+export MYHOME="/home/vagrant"
+
 # Growing the root file system
 lvresize -r -l +40%VG /dev/ubuntu-vg/ubuntu-lv
 
@@ -51,8 +53,14 @@ npm install --location=global @angular/cli
 
 # Installing Chromium, for headless testing. This uses Snapd
 # And on Hyper-V apparently snapd has a bug.
-apt-get purge snapd && apt-get install -y snapd
+apt-get purge -y snapd && apt-get install -y snapd
+if [[ $? -ne 0 ]] 
+then echo "FAILURE: Issues with snapd"; exit 1; fi
+
 apt-get install -y chromium-browser 
+if [[ $? -ne 0 ]] 
+then echo "FAILURE: Issues with Chromium install"; exit 1; fi
+
 echo "export CHROME_BIN=\"/snap/bin/chromium\"" >> /etc/bash.bashrc
 echo "export CHROME_BIN=\"/snap/bin/chromium\"" >> /etc/profile
 
@@ -63,7 +71,7 @@ systemctl start docker
 docker pull hello-world
 
 if [[ $? -ne 0 ]];
-then echo "FAILURE: Docker pullfailed."; exit 1; fi
+then echo "FAILURE: Docker pull failed."; exit 1; fi
 
 # Pulling images needed for Selenium labs
 echo "Pulling Selenium container images (two nodes and hub)"
@@ -81,14 +89,16 @@ docker pull ghcr.io/google/osv-scanner:latest
 # Pulling Nessus image for day 5
 echo "Pulling Nessus Ubuntu container image"
 docker pull tenable/nessus:latest-ubuntu
-mkdir ${HOME}/Nessus
-curl --request GET --url "https://raw.githubusercontent.com/unixerius/DSO/main/Nessus/nessus-docker-compose.yml" --output "${HOME}/Nessus/docker-compose.yml" 
+mkdir ${MYHOME}/Nessus
+curl --request GET --url "https://raw.githubusercontent.com/unixerius/DSO/main/Nessus/nessus-docker-compose.yml" --output "${MYHOME}/Nessus/docker-compose.yml" 
 
 # Pulling zap2docker and Nuclei, which are big too
 echo "Pulling Zaproxy container image"
 docker pull ghcr.io/zaproxy/zaproxy:latest
 echo "Pulling Nuclei container image"
 docker pull projectdiscovery/nuclei
+
+chown -R vagrant:vagrant ${MYHOME}
 
 SCRIPT
 ###
