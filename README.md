@@ -16,7 +16,7 @@ Students using Windows 10 or 11 on Intel/AMD systems have to options:
 1. Use Hyper-V. Best performance, but requires local admin rights to run.
 2. Use VirtualBox. Bad performance, but can run as a normal user.
 
-For VirtualBox, use the instructions described below under "VirtualBox (Windows/MacOS)".
+**For VirtualBox**, use the instructions described below under "VirtualBox (Windows/MacOS/Linux)".
 
 Preparations to use Hyper-V:
 
@@ -37,7 +37,7 @@ After the installation is complete, you can login to the VM with `vagrant ssh` a
 > Using any of the Vagrant commands with the HyperV VM will require a Powershell window which runs with Administrator rights.
 
 
-## VirtualBox (Windows/MacOS) on x86_64 (Intel core i5/i7/i9)
+## VirtualBox (Windows/MacOS/Linux) on x86_64 (Intel core i5/i7/i9)
 
 Students with an older MacOS system with an x86_64 processor (Intel) or using Windows 10/11 can use the *Vagrantfile-VirtualBox-x86_64* under "Lab setup".
 
