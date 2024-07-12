@@ -5,6 +5,9 @@ echo "192.168.56.11   devsecops" >> /etc/hosts
 apt update
 apt install -y docker.io docker-buildx docker-compose git ripgrep pip python3
 
+# Needed for the Cypres tests of JuiceShop
+apt install -y libgtk2.0-0 libgtk-3-0 libgbm-dev libnotify-dev libnss3 libxss1 libasound2 libxtst6 xauth xvfb
+
 which docker >/dev/null 2>&1 
 if [[ $? -ne 0 ]];
 then echo "FAILURE: Docker install failed."; exit 1; fi
@@ -63,8 +66,9 @@ docker pull seleniarm/node-firefox
 docker pull seleniarm/hub
 docker pull bkimminich/juice-shop:v15.0.0
 
-# Pulling image for SCA with OSV Scanner
+# Pulling image for SCA with OSV Scanner and Trivy
 docker pull ghcr.io/google/osv-scanner:latest
+docker pull aquasec/trivy
 
 # Prepping Docker BuildX
 # From here https://gist.github.com/jniltinho/bcb28a99aef33dcb5f35c297bf71e4ae
