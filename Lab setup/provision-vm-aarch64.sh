@@ -5,6 +5,8 @@
 
 echo "192.168.56.11   devsecops" >> /etc/hosts
 
+export MYHOME="/home/vagrant"
+
 # Installing pre-requisite software
 apt update
 apt install -y docker.io docker-buildx docker-compose git ripgrep pip python3
@@ -22,7 +24,7 @@ tar zxvf ~/apache-maven-3.8.8-bin.tar.gz
 ln -s apache-maven-3.8.8 /opt/maven
 cd ~; rm apache-maven*.tar.gz
 
-echo 'export JAVA_HOME="/usr/lib/jvm/java-17-openjdk-amd64/"' > /etc/profile.d/maven.sh
+echo 'export JAVA_HOME="/usr/lib/jvm/java-17-openjdk-arm64/"' > /etc/profile.d/maven.sh
 echo 'export M2_HOME="/opt/maven"' >> /etc/profile.d/maven.sh
 echo 'export MAVEN_HOME="/opt/maven"' >> /etc/profile.d/maven.sh
 echo 'export PATH="${M2_HOME}/bin:${PATH}"' >> /etc/profile.d/maven.sh
@@ -53,8 +55,7 @@ echo "export CHROME_BIN=\"/snap/bin/chromium\"" >> /etc/bash.bashrc
 echo "export CHROME_BIN=\"/snap/bin/chromium\"" >> /etc/profile
 
 # Setting up and starting Docker.
-# This assumes that you did a "su" or "sudo -i" to become root.
-usermod -a -G docker $(who am i | cut -d" " -f1)
+usermod -a -G docker vagrant
 systemctl enable docker
 systemctl start docker
 docker pull hello-world
@@ -63,20 +64,33 @@ if [[ $? -ne 0 ]];
 then echo "FAILURE: Docker pullfailed."; exit 1; fi
 
 # Pulling images needed for Selenium labs
-docker pull selenium/node-chrome:113.0
-docker pull selenium/node-firefox:112.0
-docker pull selenium/hub:4.9
+docker pull seleniarm/node-chromium
+docker pull seleniarm/node-firefox
+docker pull seleniarm/hub
 docker pull bkimminich/juice-shop:v15.0.0
 
 # Pulling image for SCA with OSV Scanner
 docker pull ghcr.io/google/osv-scanner:latest
 
-# Pulling Nessus image for day 5
-docker pull tenable/nessus:latest-ubuntu
-mkdir ${HOME}/Nessus
-curl --request GET --url "https://raw.githubusercontent.com/unixerius/DSO/main/Nessus/nessus-docker-compose.yml" --output "${HOME}/Nessus/docker-compose.yml" 
+# Prepping Docker BuildX
+# From here https://gist.github.com/jniltinho/bcb28a99aef33dcb5f35c297bf71e4ae
+VERSION=v0.14.1
+mkdir -p ${MYHOME}/.docker/cli-plugins
+wget https://github.com/docker/buildx/releases/download/$VERSION/buildx-$VERSION.linux-arm64 -O ${MYHOME}/.docker/cli-plugins/docker-buildx
+chmod +x ${MYHOME}/.docker/cli-plugins/docker-buildx
+
+export DOCKER_BUILDKIT=1
+export COMPOSE_DOCKER_CLI_BUILD=1
+echo 'export DOCKER_BUILDKIT=1' >> ${MYHOME}/.profile
+echo 'export COMPOSE_DOCKER_CLI_BUILD=1' >> ${MYHOME}/.profile
+
+# Building Nessus container for ARM
+mkdir ${MYHOME}/nessus
+curl --request GET --url "https://raw.githubusercontent.com/unixerius/DSO/main/Nessus/nessus-docker-arm" --output "${MYHOME}/nessus/nessus-docker-arm"
+docker build -t nessus -f ${MYHOME}/nessus/nessus-docker-arm ${MYHOME}/nessus/
 
 # Pulling zap2docker and Nuclei, which are big too
 docker pull ghcr.io/zaproxy/zaproxy:latest
 docker pull projectdiscovery/nuclei
- 
+
+chown -R vagrant:vagrant ${MYHOME}

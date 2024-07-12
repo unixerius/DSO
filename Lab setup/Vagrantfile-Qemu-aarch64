@@ -1,9 +1,7 @@
-#!/bin/bash
-# Run this script as root
-
-[[ $(whoami) != "root" ]] && echo "You're not root." && exit 1
-
+$script = <<-SCRIPT
 echo "192.168.56.11   devsecops" >> /etc/hosts
+
+export MYHOME="/home/vagrant"
 
 # Installing pre-requisite software
 apt update
@@ -73,21 +71,55 @@ docker pull ghcr.io/google/osv-scanner:latest
 # Prepping Docker BuildX
 # From here https://gist.github.com/jniltinho/bcb28a99aef33dcb5f35c297bf71e4ae
 VERSION=v0.14.1
-mkdir -p $HOME/.docker/cli-plugins
-wget https://github.com/docker/buildx/releases/download/$VERSION/buildx-$VERSION.linux-arm64 -O $HOME/.docker/cli-plugins/docker-buildx
-chmod +x $HOME/.docker/cli-plugins/docker-buildx
+mkdir -p ${MYHOME}/.docker/cli-plugins
+wget https://github.com/docker/buildx/releases/download/$VERSION/buildx-$VERSION.linux-arm64 -O ${MYHOME}/.docker/cli-plugins/docker-buildx
+chmod +x ${MYHOME}/.docker/cli-plugins/docker-buildx
 
 export DOCKER_BUILDKIT=1
 export COMPOSE_DOCKER_CLI_BUILD=1
-echo 'export DOCKER_BUILDKIT=1
-export COMPOSE_DOCKER_CLI_BUILD=1' >> $HOME/.profile
+echo 'export DOCKER_BUILDKIT=1' >> ${MYHOME}/.profile
+echo 'export COMPOSE_DOCKER_CLI_BUILD=1' >> ${MYHOME}/.profile
 
 # Building Nessus container for ARM
-mkdir ${HOME}/nessus
-curl --request GET --url "https://raw.githubusercontent.com/unixerius/DSO/main/Nessus/nessus-docker-arm" --output "${HOME}/nessus/nessus-docker-arm"
-docker build -t nessus -f ${HOME}/nessus/nessus-docker-arm ${HOME}/nessus/
+mkdir ${MYHOME}/nessus
+curl --request GET --url "https://raw.githubusercontent.com/unixerius/DSO/main/Nessus/nessus-docker-arm" --output "${MYHOME}/nessus/nessus-docker-arm"
+docker build -t nessus -f ${MYHOME}/nessus/nessus-docker-arm ${MYHOME}/nessus/
 
 # Pulling zap2docker and Nuclei, which are big too
 docker pull ghcr.io/zaproxy/zaproxy:latest
 docker pull projectdiscovery/nuclei
 
+chown -R vagrant:vagrant ${MYHOME}
+
+SCRIPT
+###
+# End of provisioning script
+
+
+Vagrant.configure("2") do |config|
+
+  config.vm.define :devsecops do |devsecops|
+    devsecops.vm.hostname = "devsecops"
+    devsecops.vm.box = "perk/ubuntu-2204-arm64"
+
+    devsecops.vm.network "forwarded_port", guest: 3000, host: 3000
+    devsecops.vm.network "forwarded_port", guest: 4444, host: 4444
+    devsecops.vm.network "forwarded_port", guest: 8834, host: 8834
+
+    if Vagrant.has_plugin?("vagrant-vbguest")
+      devsecops.vbguest.auto_update = false
+    end
+
+    devsecops.vm.provider "qemu" do |v|
+      v.memory = 4096           # Change to 6144 or 8192 if possible
+
+      # Switch between these two, if you have enough CPU cores.
+      v.smp = "cpus=4,sockets=1,cores=2,threads=2"
+      #v.smp = "cpus=8,sockets=2,cores=2,threads=2"
+
+    end
+    
+    devsecops.vm.provision "setup", type: "shell", inline: $script
+  end
+
+end
