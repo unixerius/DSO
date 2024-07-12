@@ -1,6 +1,9 @@
 $script = <<-SCRIPT
 echo "192.168.56.11   devsecops" >> /etc/hosts
 
+# Growing the root file system
+lvresize -r -l +40%VG /dev/ubuntu-vg/ubuntu-lv
+
 # Installing pre-requisite software
 apt update
 apt install -y docker.io docker-buildx docker-compose git ripgrep pip python3
@@ -18,7 +21,7 @@ tar zxvf ~/apache-maven-3.8.8-bin.tar.gz
 ln -s apache-maven-3.8.8 /opt/maven
 cd ~; rm apache-maven*.tar.gz
 
-echo 'export JAVA_HOME="/usr/lib/jvm/java-17-openjdk-arm64/"' > /etc/profile.d/maven.sh
+echo 'export JAVA_HOME="/usr/lib/jvm/java-17-openjdk-amd64/"' > /etc/profile.d/maven.sh
 echo 'export M2_HOME="/opt/maven"' >> /etc/profile.d/maven.sh
 echo 'export MAVEN_HOME="/opt/maven"' >> /etc/profile.d/maven.sh
 echo 'export PATH="${M2_HOME}/bin:${PATH}"' >> /etc/profile.d/maven.sh
@@ -49,6 +52,7 @@ echo "export CHROME_BIN=\"/snap/bin/chromium\"" >> /etc/bash.bashrc
 echo "export CHROME_BIN=\"/snap/bin/chromium\"" >> /etc/profile
 
 # Setting up and starting Docker.
+# This assumes that you did a "su" or "sudo -i" to become root.
 usermod -a -G docker vagrant
 systemctl enable docker
 systemctl start docker
@@ -58,30 +62,19 @@ if [[ $? -ne 0 ]];
 then echo "FAILURE: Docker pullfailed."; exit 1; fi
 
 # Pulling images needed for Selenium labs
-docker pull seleniarm/node-chromium
-docker pull seleniarm/node-firefox
-docker pull seleniarm/hub
+docker pull selenium/node-chrome:113.0
+docker pull selenium/node-firefox:112.0
+docker pull selenium/hub:4.9
 docker pull bkimminich/juice-shop:v15.0.0
 
-# Pulling image for SCA with OSV Scanner
+# Pulling image for SCA with OSV Scanner and Trivy
 docker pull ghcr.io/google/osv-scanner:latest
+docker pull aquasec/trivy
 
-# Prepping Docker BuildX
-# From here https://gist.github.com/jniltinho/bcb28a99aef33dcb5f35c297bf71e4ae
-VERSION=v0.14.1
-mkdir -p $HOME/.docker/cli-plugins
-wget https://github.com/docker/buildx/releases/download/$VERSION/buildx-$VERSION.linux-arm64 -O $HOME/.docker/cli-plugins/docker-buildx
-chmod +x $HOME/.docker/cli-plugins/docker-buildx
-
-export DOCKER_BUILDKIT=1
-export COMPOSE_DOCKER_CLI_BUILD=1
-echo 'export DOCKER_BUILDKIT=1
-export COMPOSE_DOCKER_CLI_BUILD=1' >> $HOME/.profile
-
-# Building Nessus container for ARM
-mkdir ${HOME}/nessus
-curl --request GET --url "https://raw.githubusercontent.com/unixerius/DSO/main/Nessus/nessus-docker-arm" --output "${HOME}/nessus/nessus-docker-arm"
-docker build -t nessus -f ${HOME}/nessus/nessus-docker-arm ${HOME}/nessus/
+# Pulling Nessus image for day 5
+docker pull tenable/nessus:latest-ubuntu
+mkdir ${HOME}/Nessus
+curl --request GET --url "https://raw.githubusercontent.com/unixerius/DSO/main/Nessus/nessus-docker-compose.yml" --output "${HOME}/Nessus/docker-compose.yml" 
 
 # Pulling zap2docker and Nuclei, which are big too
 docker pull ghcr.io/zaproxy/zaproxy:latest
@@ -96,7 +89,13 @@ Vagrant.configure("2") do |config|
 
   config.vm.define :devsecops do |devsecops|
     devsecops.vm.hostname = "devsecops"
-    devsecops.vm.box = "perk/ubuntu-2204-arm64"
+    #devsecops.vm.box = "bento/ubuntu-20.04"    # This was the original
+    devsecops.vm.box = "bento/ubuntu-22.04"
+
+    # Switch these two, if VirtualBox complains about "permission denied" on networking.
+    devsecops.vm.network "private_network", ip: "192.168.56.11", virtualbox__intnet: "dsonet"
+    #devsecops.vm.network "private_network", ip: "192.168.56.11"
+    ###
 
     devsecops.vm.network "forwarded_port", guest: 3000, host: 3000
     devsecops.vm.network "forwarded_port", guest: 4444, host: 4444
@@ -106,13 +105,10 @@ Vagrant.configure("2") do |config|
       devsecops.vbguest.auto_update = false
     end
 
-    devsecops.vm.provider "qemu" do |v|
-      v.memory = 4096           # Change to 8192 if possible
-      # Switch between these two, if you have enough CPU cores.
-      v.smp = "cpus=4,sockets=1,cores=2,threads=2"
-      #v.smp = "cpus=8,sockets=2,cores=2,threads=2"
+    devsecops.vm.provider "virtualbox" do |v|
+      v.memory = 4096          # Change to 8192 if possible
+      v.cpus = 4               # Change to 6 if possible
     end
-    
     devsecops.vm.provision "setup", type: "shell", inline: $script
   end
 

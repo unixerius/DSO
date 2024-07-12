@@ -1,8 +1,4 @@
-#!/bin/bash
-# Run this script as root
-
-[[ $(whoami) != "root" ]] && echo "You're not root." && exit 1
-
+$script = <<-SCRIPT
 echo "192.168.56.11   devsecops" >> /etc/hosts
 
 # Installing pre-requisite software
@@ -95,3 +91,33 @@ docker build -t nessus -f ${HOME}/nessus/nessus-docker-arm ${HOME}/nessus/
 docker pull ghcr.io/zaproxy/zaproxy:latest
 docker pull projectdiscovery/nuclei
 
+SCRIPT
+###
+# End of provisioning script
+
+
+Vagrant.configure("2") do |config|
+
+  config.vm.define :devsecops do |devsecops|
+    devsecops.vm.hostname = "devsecops"
+    devsecops.vm.box = "perk/ubuntu-2204-arm64"
+
+    devsecops.vm.network "forwarded_port", guest: 3000, host: 3000
+    devsecops.vm.network "forwarded_port", guest: 4444, host: 4444
+    devsecops.vm.network "forwarded_port", guest: 8834, host: 8834
+
+    if Vagrant.has_plugin?("vagrant-vbguest")
+      devsecops.vbguest.auto_update = false
+    end
+
+    devsecops.vm.provider "qemu" do |v|
+      v.memory = 4096           # Change to 8192 if possible
+      # Switch between these two, if you have enough CPU cores.
+      v.smp = "cpus=4,sockets=1,cores=2,threads=2"
+      #v.smp = "cpus=8,sockets=2,cores=2,threads=2"
+    end
+    
+    devsecops.vm.provision "setup", type: "shell", inline: $script
+  end
+
+end

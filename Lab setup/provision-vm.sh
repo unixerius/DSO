@@ -9,6 +9,9 @@ echo "192.168.56.11   devsecops" >> /etc/hosts
 apt update
 apt install -y docker.io docker-buildx docker-compose git ripgrep pip python3
 
+# Needed for the Cypres tests of JuiceShop
+apt install -y libgtk2.0-0 libgtk-3-0 libgbm-dev libnotify-dev libnss3 libxss1 libasound2 libxtst6 xauth xvfb
+
 which docker >/dev/null 2>&1 
 if [[ $? -ne 0 ]];
 then echo "FAILURE: Docker install failed."; exit 1; fi
@@ -68,8 +71,9 @@ docker pull selenium/node-firefox:112.0
 docker pull selenium/hub:4.9
 docker pull bkimminich/juice-shop:v15.0.0
 
-# Pulling image for SCA with OSV Scanner
+# Pulling image for SCA with OSV Scanner and Trivy
 docker pull ghcr.io/google/osv-scanner:latest
+docker pull aquasec/trivy
 
 # Pulling Nessus image for day 5
 docker pull tenable/nessus:latest-ubuntu
