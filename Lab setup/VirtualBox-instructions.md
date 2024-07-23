@@ -8,7 +8,7 @@ Preparations before you do so:
 * [Download and install Vagrant](https://developer.hashicorp.com/vagrant/downloads?product_intent=vagrant)
 * Students on MacOS need to get [Homebrew](https://brew.sh) and install Vagrant using that.
 
-Then download the `Vagrantfile-VirtualBox-x86_64`, put it in a separate folder, rename it to `Vagrantfile` and run `vagrant up`.
+Then download the [Vagrantfile-VirtualBox-x86_64](https://github.com/unixerius/DSO/blob/readme-july/Lab%20setup/Vagrantfile-VirtualBox-x86_64), put it in a separate folder, rename it to `Vagrantfile` and run `vagrant up`.
 
 This process will take about 10-15 minutes, depending on your Internet connection speed.
 
