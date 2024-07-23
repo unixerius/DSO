@@ -22,6 +22,8 @@ Which instructions you follow, depends on your host OS (the operating system on 
 | MacOS         | x86_64            | Homebrew<br />VirtualBox<br />Vagrant | n.a.                           |
 | MacOS         | Silicon / aarch64 | Homebrew<br />Qemu<br />Vagrant       | Homebrew<br />UTM<br />Vagrant |
 
+*After installing the required software*, you must download a Vagrant configuration file as per the instructions. You will then use Vagrant to create the VM in your chosen virtualization tool. Vagrant will make the VM, download the OS and do all the software installations.
+
 In the paragraphs below you will find instructions for each of the combinations. 
 
 
