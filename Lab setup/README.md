@@ -2,10 +2,10 @@
 
 Follow ONE of the following sets of instructions, based on your choice from the table above.
 
-* [https://github.com/unixerius/DSO/blob/readme-july/Lab%20setup/HyperV-instructions.md](HyperV on Windows, with x86_64)
-* [https://github.com/unixerius/DSO/blob/readme-july/Lab%20setup/VirtualBox-instructions.md](VirtualBox on Windows, MacOS or Linux, with x86_64)
-* [https://github.com/unixerius/DSO/blob/readme-july/Lab%20setup/Qemu-instructions.md](Qemu on MacOS, with aarch64)
-* [https://github.com/unixerius/DSO/blob/readme-july/Lab%20setup/UTM-instructions.md](UTM on MacOS, with aarch64)
+* [HyperV on Windows, with x86_64](https://github.com/unixerius/DSO/blob/readme-july/Lab%20setup/HyperV-instructions.md)
+* [VirtualBox on Windows, MacOS or Linux, with x86_64](https://github.com/unixerius/DSO/blob/readme-july/Lab%20setup/VirtualBox-instructions.md)
+* [Qemu on MacOS, with aarch64](https://github.com/unixerius/DSO/blob/readme-july/Lab%20setup/Qemu-instructions.md)
+* [UTM on MacOS, with aarch64](https://github.com/unixerius/DSO/blob/readme-july/Lab%20setup/UTM-instructions.md)
 
 Using these instructions you will do the following:
 
