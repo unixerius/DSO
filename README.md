@@ -40,4 +40,3 @@ Using these instructions you will do the following:
 2. Donwload a Vagrant configuration file and use it to setup a new Vagrant project.
 3. Use Vagrant to create and install the VM.
 
-
