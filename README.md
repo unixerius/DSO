@@ -9,6 +9,17 @@ This repository holds files that are used by students in the Unixerius / ITVitae
 
 # Workstation setup.
 
+## Requirements
+
+Students are required to bring their own laptop.
+
+The laptop should be somewhat recent, built in or after 2020. 
+
+* It must have 8GB of RAM, or more.
+* It needs at least 50GB of free storage space.
+* It should have either an Intel i5/i7/i9, AMD Ryzen, or Apple Silicon (ARM) CPU.
+
+
 ## Overview
 
 In order to prepare your laptop for the "Introduction to DevSecOps" class, you will need to install a virtual machine with tools. I have prepared everything for you, all the hard work's been done. You just need to follow a few steps, after installing one or two pieces of software. 
