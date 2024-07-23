@@ -29,10 +29,10 @@ Which instructions you follow, depends on your host OS (the operating system on 
 
 Follow ONE of the following sets of instructions, based on your choice from the table above.
 
-[./Lab\ setup/HyperV-instructions.md](HyperV on Windows, with x86_64)
-[./Lab\ setup/VirtualBox-instructions.md](VirtualBox on Windows, MacOS or Linux, with x86_64)
-[./Lab\ setup/Qemu-instructions.md](Qemu on MacOS, with aarch64)
-[./Lab\ setup/UTM-instructions.md](UTM on MacOS, with aarch64)
+* [./Lab setup/HyperV-instructions.md](HyperV on Windows, with x86_64)
+* [./Lab setup/VirtualBox-instructions.md](VirtualBox on Windows, MacOS or Linux, with x86_64)
+* [./Lab setup/Qemu-instructions.md](Qemu on MacOS, with aarch64)
+* [./Lab setup/UTM-instructions.md](UTM on MacOS, with aarch64)
 
 Using these instructions you will do the following:
 
