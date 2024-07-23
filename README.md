@@ -9,6 +9,22 @@ This repository holds files that are used by students in the Unixerius / ITVitae
 
 # Workstation setup.
 
+## Overview
+
+In order to prepare your laptop for the "Introduction to DevSecOps" class, you will need to install a virtual machine with tools. I have prepared everything for you, all the hard work's been done. You just need to follow a few steps, after installing one or two pieces of software. 
+
+Which instructions you follow, depends on your host OS (the operating system on your laptop) and the architecture (which CPU is in there). The table provides an overview of my recommended approach. Only choose the fallback options if my recommended option does not work for you.
+
+| Laptop OS     | Architecture      | Recommended install                   | Fallback option                |
+| ------------- | ----------------- | ------------------------------------- | ------------------------------ |
+| Windows 10/11 | x86_64 / amd64    | HyperV<br />Vagrant                   | VirtualBox<br />Vagrant        |
+| Linux         | x86_64 / amd64    | VirtualBox<br />Vagrant               | n.a.                           |
+| MacOS         | x86_64            | Homebrew<br />VirtualBox<br />Vagrant | n.a.                           |
+| MacOS         | Silicon / aarch64 | Homebrew<br />Qemu<br />Vagrant       | Homebrew<br />UTM<br />Vagrant |
+
+In the paragraphs below you will find instructions for each of the combinations. 
+
+
 ## Windows on x86_64
 
 Students using Windows 10 or 11 on Intel/AMD systems have to options:
@@ -22,7 +38,7 @@ Preparations to use Hyper-V:
 
 * You must have access to local administrator rights. 
 * Windows **must** have Hyper-V and virtualization services installed.
-* [Install Vagrant](https://developer.hashicorp.com/vagrant/downloads?product_intent=vagrant)
+* [Download and install Vagrant](https://developer.hashicorp.com/vagrant/downloads?product_intent=vagrant)
 
 From the "Lab Setup" folder, download the `Vagrantfile-HyperV-x86_64`, put it in a separate folder, rename it to `Vagrantfile`. 
 
@@ -39,14 +55,14 @@ After the installation is complete, you can login to the VM with `vagrant ssh` a
 > Using any of the Vagrant commands with the HyperV VM will require a Powershell window which runs with Administrator rights.
 
 
-## VirtualBox (Windows/MacOS/Linux) on x86_64 (Intel core i5/i7/i9)
+## VirtualBox (Windows/MacOS/Linux) on x86_64 (Intel core i5/i7/i9 or AMD Ryzen)
 
-Students with an older MacOS system with an x86_64 processor (Intel) or using Windows 10/11 can use the *Vagrantfile-VirtualBox-x86_64* under "Lab setup".
+Students with an older MacOS system with an x86_64 processor (Intel or AMD), or using Linux, or using Windows 10/11 can use the *Vagrantfile-VirtualBox-x86_64* under "Lab setup".
 
 Preparations before you do so:
 
-* [Install Virtualbox](https://virtualbox.org)
-* [Install Vagrant](https://developer.hashicorp.com/vagrant/downloads?product_intent=vagrant)
+* [Download and install Virtualbox](https://virtualbox.org)
+* [Download and install Vagrant](https://developer.hashicorp.com/vagrant/downloads?product_intent=vagrant)
 
 Then download the `Vagrantfile-VirtualBox-x86_64`, put it in a separate folder, rename it to `Vagrantfile` and run `vagrant up`.
 
@@ -61,10 +77,24 @@ After the installation is complete, you can login to the VM with `vagrant ssh` a
 
 Students with a modern Macintosh computer with Apple Silicon processor have two options:
 
-1. Using UTM, manually installing Ubuntu and running the provisioning script.
-2. Using Homebrew, Qemu and Vagrant.
+1. Using Homebrew, Qemu and Vagrant.
+2. Using UTM, manually installing Ubuntu and running the provisioning script.
 
-If you're in a hurry, I recommend the second option. 
+If you're in a hurry, I recommend the first option. 
+
+
+### Apple Silicon - Qemu and Vagrant
+
+1. [Download and Install Homebrew.](https://brew.sh)
+2. Install Vagrant and Qemu, by running `brew install -y qemu vagrant`.
+3. Install the Qemu plugin for Vagrant: `vagrant plugin install vagrant-qemu`
+4. Download the *Vagrantfile-Qemu-aarch64*, put it in a separate folder, rename it to *Vagrantfile*, then run `vagrant up`.
+
+The building and installing of the VM will take 20-30 minutes, depending on your Internet connection speed.
+
+[Here's a video that shows the process.](https://www.youtube.com/watch?v=DsEdfCggXlQ)
+
+After the installation is complete, you can login to the VM with `vagrant ssh` and you can shut it down with `vagrant halt`. Later you can start it up with `vagrant up` again.
 
 
 ### Apple Silicon - UTM
@@ -81,20 +111,6 @@ If you're in a hurry, I recommend the second option.
 The installation/provisioning will require 10-20 minutes, depending on your Internet connection speed.
 
 You can choose to work on the VM via the UTM graphical interface, or you can SSH into the server from your laptop's host OS. UTM VMs are directly accessible from the host OS, all you need to know is the IP.
-
-
-### Apple Silicon - Qemu and Vagrant
-
-1. [Install Homebrew.](https://brew.sh)
-2. Install Vagrant and Qemu, by running `brew install qemu vagrant`.
-3. Install the Qemu plugin for Vagrant: `vagrant plugin install vagrant-qemu`
-4. Download the *Vagrantfile-Qemu-aarch64*, put it in a separate folder, rename it to *Vagrantfile*, then run `vagrant up`.
-
-The building and installing of the VM will take 20-30 minutes, depending on your Internet connection speed.
-
-[Here's a video that shows the process.](https://www.youtube.com/watch?v=DsEdfCggXlQ)
-
-After the installation is complete, you can login to the VM with `vagrant ssh` and you can shut it down with `vagrant halt`. Later you can start it up with `vagrant up` again.
 
 
 # License
