@@ -2,6 +2,8 @@
 
 For students using Windows 10 or 11 on Intel/AMD systems the best option is to use HyperV. It offers better performance than VirtualBox.
 
+**Note: This requires Windows Pro or Windows Education license.**
+
 ## Preparations to use Hyper-V:
 
 * You must have access to local administrator rights. 
