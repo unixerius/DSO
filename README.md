@@ -28,7 +28,7 @@ Which instructions you follow, depends on your host OS (the operating system on 
 
 | Laptop OS     | Architecture      | Recommended install                   | Fallback option                |
 | ------------- | ----------------- | ------------------------------------- | ------------------------------ |
-| Windows 10/11 | x86_64 / amd64    | HyperV<br />Vagrant                   | VirtualBox<br />Vagrant        |
+| Windows 10/11 | x86_64 / amd64    | HyperV<br />Vagrant<br />**Requires Win Pro or Edu | VirtualBox<br />Vagrant        |
 | Linux         | x86_64 / amd64    | VirtualBox<br />Vagrant               | n.a.                           |
 | MacOS         | x86_64            | Homebrew<br />VirtualBox<br />Vagrant | n.a.                           |
 | MacOS         | Silicon / aarch64 | Homebrew<br />Qemu<br />Vagrant       | Homebrew<br />UTM<br />Vagrant |
