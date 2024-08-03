@@ -47,7 +47,7 @@ stages:
       artifact: npm-audit-result.json
 
 - stage: build
-  condition: always()
+  condition: always
   jobs: 
   - job: build_and_push_image
     steps:
@@ -67,11 +67,6 @@ stages:
         containerRegistry: ${{ variables.registry }}
         command: 'logout'
   
-#- stage: trivy
-#  condition: eq(variables['Build.SourceBranch'], 'refs/heads/dev')
-#  jobs:
-#  - job: install_and_run
-#    steps:
     - task: Bash@3
       displayName: install_trivy
       inputs:
@@ -92,7 +87,7 @@ stages:
 - stage: run_webapp
   dependsOn:
   - build
-  condition: always()
+  condition: eq(variables['Build.SourceBranch'], 'refs/heads/prod')
 
   jobs:
   - job: update_appsvc_dev
