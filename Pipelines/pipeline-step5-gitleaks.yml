@@ -92,7 +92,7 @@ stages:
       artifact: gitleaks-result.json
 
 - stage: build
-  condition: eq(variables['Build.SourceBranch'], 'refs/heads/prod')
+  condition: eq(variables['Build.SourceBranch'], 'refs/heads/main')
 
   jobs: 
   - job: build_and_push_image
@@ -132,7 +132,7 @@ stages:
 - stage: run_webapp
   dependsOn:
   - build
-  condition: eq(variables['Build.SourceBranch'], 'refs/heads/prod')
+  condition: eq(variables['Build.SourceBranch'], 'refs/heads/main')
 
   jobs:
   - job: update_appsvc_dev

@@ -75,7 +75,7 @@ stages:
         publishLocation: 'Container'
 
 - stage: build
-  condition: eq(variables['Build.SourceBranch'], 'refs/heads/prod')
+  condition: eq(variables['Build.SourceBranch'], 'refs/heads/main')
   jobs: 
   - job: build_and_push_image
     steps:
@@ -114,7 +114,7 @@ stages:
 - stage: run_webapp
   dependsOn:
   - build
-  condition: eq(variables['Build.SourceBranch'], 'refs/heads/prod')
+  condition: eq(variables['Build.SourceBranch'], 'refs/heads/main')
 
   jobs:
   - job: update_appsvc_dev
