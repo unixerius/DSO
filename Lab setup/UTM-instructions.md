@@ -2,7 +2,7 @@
 
 Students with a modern Macintosh computer with Apple Silicon processor can also use UTM if they don't want to install Homebrew and Qemu. 
 
-## Apple Silicon - UTM
+## Creating the lab VM
 
 1. [Download and install UTM.](https://mac.getutm.app)
 2. [Download the Live ISO for Ubuntu Server 22.04 for aarch64](https://cdimage.ubuntu.com/releases/22.04/release/ubuntu-22.04.2-live-server-arm64.iso)

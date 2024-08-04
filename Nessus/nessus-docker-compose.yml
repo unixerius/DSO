@@ -3,7 +3,7 @@ version: '3.1'
 services:
 
   nessus:
-    image: tenable/nessus
+    image: tenable/nessus:latest-ubuntu
     restart: always
     container_name: nessus
     environment:

@@ -73,7 +73,7 @@ stages:
       artifact: osv-scanner.json
 
 - stage: build
-  condition: always()
+  condition: eq(variables['Build.SourceBranch'], 'refs/heads/main')
   jobs:        
   - job: build_and_push_image
     steps:
@@ -97,7 +97,7 @@ stages:
 - stage: run_webapp
   dependsOn:
   - build
-  condition: always()
+  condition: eq(variables['Build.SourceBranch'], 'refs/heads/main')
 
   jobs:
   - job: update_appsvc_dev
