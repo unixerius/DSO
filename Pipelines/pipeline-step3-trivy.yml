@@ -47,7 +47,7 @@ stages:
       artifact: npm-audit-result.json
 
 - stage: build
-  condition: always
+  condition: always()
   jobs: 
   - job: build_and_push_image
     steps:
