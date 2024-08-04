@@ -84,7 +84,7 @@ stages:
         workingDirectory: '$(Build.SourcesDirectory)'
         script: |
           pwd; ls -al
-          docker run --mount type=bind,src=$(pwd),dst=/pwd trufflesecurity/trufflehog filesystem /pwd --no-verify-detectors=all --json --fail | tee trufflehog-result.json
+          docker run --mount type=bind,src=$(pwd),dst=/pwd trufflesecurity/trufflehog filesystem /pwd --no-verification --json --fail | tee trufflehog-result.json
 
     - publish: '$(Build.SourcesDirectory)/trufflehog-result.json'
       artifact: trufflehog-result.json
