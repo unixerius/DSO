@@ -123,7 +123,7 @@ Vagrant.configure("2") do |config|
     devsecops.vm.network "forwarded_port", guest: 8834, host: 8834
 
     if Vagrant.has_plugin?("vagrant-vbguest")
-      devsecops.vbguest.auto_update = true
+      devsecops.vbguest.auto_update = false
     end
 
     devsecops.vm.provider "virtualbox" do |v|
