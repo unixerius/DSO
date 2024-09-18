@@ -95,6 +95,11 @@ stages:
         containerRegistry: ${{ variables.registry }}
         command: 'logout'
 
+- stage: trivy
+  condition: eq(variables['Build.SourceBranch'], 'refs/heads/dev')
+  jobs:
+  - job: trivy_sca
+    steps:
     - task: Bash@3
       displayName: install_trivy
       inputs:
@@ -102,6 +107,21 @@ stages:
         script: |
           wget https://github.com/aquasecurity/trivy/releases/download/v0.18.3/trivy_0.18.3_Linux-64bit.deb
           sudo dpkg -i trivy_0.18.3_Linux-64bit.deb
+    - task: Docker@2
+      displayName: login_acr
+      inputs:
+        containerRegistry: ${{ variables.registry }}
+        command: 'login'
+    - task: Bash@3
+      displayName: install_trivy
+      inputs:
+        targetType: 'inline'
+        script: docker pull '${{ variables.registry }}.azurecr.io/${{ variables.team }}:${{ variables.dtap }}'
+    - task: Docker@2
+      displayName: logout_acr
+      inputs:
+        containerRegistry: ${{ variables.registry }}
+        command: 'logout'
     - task: Bash@3
       displayName: run_trivy
       inputs:
@@ -109,7 +129,7 @@ stages:
         script: |
           trivy image -f json -o trivy-result.json '${{ variables.registry }}.azurecr.io/${{ variables.team }}:${{ variables.dtap }}'
     - publish: './trivy-result.json'
-      artifact: trivy-result.json    
+      artifact: trivy-result.json 
 
 - stage: run_webapp
   dependsOn:
