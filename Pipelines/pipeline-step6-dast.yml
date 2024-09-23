@@ -199,17 +199,3 @@ stages:
     - publish: '$(Build.SourcesDirectory)/zap-result.txt'
       artifact: zap-result.txt
 
-  - job: nuclei
-    steps:
-    - task: Bash@3
-      continueOnError: true          # We do not want to "break the build".
-      displayName: run_nuclei
-      inputs:
-        targetType: 'inline'
-        workingDirectory: '$(Build.SourcesDirectory)'
-        script: |
-          docker run projectdiscovery/nuclei -u '${{ variables.webappurl }}' | tee nuclei-result.txt
-
-    - publish: '$(Build.SourcesDirectory)/nuclei-result.txt'
-      artifact: nuclei-result.txt
-
