@@ -7,7 +7,7 @@ For students using Windows 10 or 11 on Intel/AMD systems the best option is to u
 ## Preparations to use Hyper-V:
 
 * You must have access to local administrator rights. 
-* Windows **must** have Hyper-V and virtualization services installed.
+* Windows **must** have Hyper-V and virtualization services installed. You can test this by opening a Powershell window and running these two commands: `(Get-CimInstance win32_processor).VirtualizationFirmwareEnabled` (which should show "True") and `Get-Service vmcompute` (which should show "Running")
 * [Download and install Vagrant](https://developer.hashicorp.com/vagrant/downloads?product_intent=vagrant)
 
 ## Creating the lab VM 
