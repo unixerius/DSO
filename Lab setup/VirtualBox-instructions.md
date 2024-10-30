@@ -23,7 +23,9 @@ powercfg /powerthrottling disable /path "C:\Program Files\Oracle\VirtualBox\Virt
 powercfg /powerthrottling list
 ```
 
-The third command should include the "VBoxHeadless" and "VirtaualBoxVM" processes.
+The third command should include the "VBoxHeadless" and "VirtualBoxVM" processes. [Source](https://forums.virtualbox.org/viewtopic.php?t=108745)
+
+Also, you may want to change your overall power management settings for the duration of this class. You can change these by opening the **Settings** app, then going into _Power & Battery > Power mode_ and setting it to "_Best Performance_".
 
 ## Creating the lab VM
 
