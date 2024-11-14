@@ -83,6 +83,9 @@ docker pull selenium/node-chrome:113.0
 docker pull selenium/node-firefox:112.0
 docker pull selenium/hub:4.9
 
+echo "Pulling node20 container image for building."
+docker pull node:20
+
 echo "Pulling Juice Shop container image"
 docker pull bkimminich/juice-shop:v15.0.0
 

@@ -65,6 +65,9 @@ docker pull seleniarm/node-firefox
 docker pull seleniarm/hub
 docker pull bkimminich/juice-shop:v15.0.0
 
+echo "Pulling node20 container image for building."
+docker pull node:20
+
 # Pulling image for SCA with OSV Scanner
 docker pull ghcr.io/google/osv-scanner:latest
 
