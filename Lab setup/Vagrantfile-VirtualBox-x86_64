@@ -79,12 +79,19 @@ docker pull selenium/node-chrome:113.0
 docker pull selenium/node-firefox:112.0
 docker pull selenium/hub:4.9
 
+echo "Pulling node20 container image for building."
+docker pull node:20
+
 echo "Pulling Juice Shop container image"
 docker pull bkimminich/juice-shop:v15.0.0
 
 # Pulling image for SCA with OSV Scanner
 echo "Pulling OSV Scanner container image"
 docker pull ghcr.io/google/osv-scanner:latest
+
+# Pulling SAST scanner
+echo "Pulling semgrep container image"
+docker pull returntocorp/semgrep
 
 # Pulling Nessus image for day 5
 echo "Pulling Nessus Ubuntu container image"
