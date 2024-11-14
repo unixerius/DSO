@@ -89,6 +89,10 @@ docker pull bkimminich/juice-shop:v15.0.0
 echo "Pulling OSV Scanner container image"
 docker pull ghcr.io/google/osv-scanner:latest
 
+# Pulling SAST scanner
+echo "Pulling semgrep container image"
+docker pull returntocorp/semgrep
+
 # Pulling Nessus image for day 5
 echo "Pulling Nessus Ubuntu container image"
 docker pull tenable/nessus:latest-ubuntu
