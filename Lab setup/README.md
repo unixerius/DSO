@@ -5,6 +5,7 @@ Follow ONE of the following sets of instructions, based on your choice from the 
 * [HyperV on Windows, with x86_64](https://github.com/unixerius/DSO/blob/main/Lab%20setup/HyperV-instructions.md)
 * [VirtualBox on Windows, MacOS or Linux, with x86_64](https://github.com/unixerius/DSO/blob/main/Lab%20setup/VirtualBox-instructions.md)
 * [Qemu on MacOS, with aarch64](https://github.com/unixerius/DSO/blob/main/main/Qemu-instructions.md)
+* [VMWare on MacOS, with aarch64](https://github.com/unixerius/DSO/blob/main/Lab%20setup/VMWare-aarch64-instructions.md)
 * [UTM on MacOS, with aarch64](https://github.com/unixerius/DSO/blob/main/main/UTM-instructions.md)
 
 Using these instructions you will do the following:
