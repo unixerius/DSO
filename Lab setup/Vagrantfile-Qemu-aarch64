@@ -33,6 +33,7 @@ if [[ $? -ne 0 ]];
 then echo "FAILURE: Maven install failed."; exit 1; fi
 
 # Installing NodeJS from outside sources.
+[[ ! -d /etc/apt/keyrings ]] && mkdir /etc/apt/keyrings
 curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg
 echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_16.x nodistro main" > /etc/apt/sources.list.d/nodesource.list
 apt update
@@ -90,6 +91,7 @@ echo 'export COMPOSE_DOCKER_CLI_BUILD=1' >> ${MYHOME}/.profile
 # Building Nessus container for ARM
 mkdir ${MYHOME}/nessus
 curl --request GET --url "https://raw.githubusercontent.com/unixerius/DSO/main/Nessus/nessus-docker-arm" --output "${MYHOME}/nessus/nessus-docker-arm"
+dos2unix ${MYHOME}/Nessus/*
 docker build -t nessus -f ${MYHOME}/nessus/nessus-docker-arm ${MYHOME}/nessus/
 
 # Pulling zap2docker and Nuclei, which are big too
