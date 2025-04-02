@@ -8,7 +8,7 @@ For students with a modern Macintosh computer with Apple Silicon processor, who 
 
 1. [Download and Install Homebrew.](https://brew.sh)
 2. Install Vagrant, by running `brew install -y qemu vagrant`.
-3. Visit the "Install Vagrant VMWare Utility" page and download the ARM64 binary download.
+3. Visit [the "Install Vagrant VMWare Utility" page](https://developer.hashicorp.com/vagrant/install/vmware) and download the ARM64 binary download.
 4. Install the Vagrant VMWare Utility, from the downloaded DMG file. 
 5. Install the Qemu plugin for Vagrant: `vagrant plugin install vagrant-vmware-desktop`
 
