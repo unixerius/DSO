@@ -3,12 +3,9 @@ echo "192.168.56.11   devsecops" >> /etc/hosts
 
 export MYHOME="/home/vagrant"
 
-# Growing the root file system
-lvresize -r -l +40%VG /dev/ubuntu-vg/ubuntu-lv
-
 # Installing pre-requisite software
 apt-get update
-apt-get install -y docker.io docker-buildx docker-compose git ripgrep pip python3
+apt-get install -y docker.io docker-compose git ripgrep pip python3
 
 # Needed for the Cypres tests of JuiceShop
 apt install -y libgtk2.0-0 libgtk-3-0 libgbm-dev libnotify-dev libnss3 libxss1 libasound2 libxtst6 xauth xvfb
@@ -26,7 +23,7 @@ tar zxvf ~/apache-maven-3.8.8-bin.tar.gz
 ln -s apache-maven-3.8.8 /opt/maven
 cd ~; rm apache-maven*.tar.gz
 
-echo 'export JAVA_HOME="/usr/lib/jvm/java-17-openjdk-amd64/"' > /etc/profile.d/maven.sh
+echo 'export JAVA_HOME="/usr/lib/jvm/java-17-openjdk-arm64/"' > /etc/profile.d/maven.sh
 echo 'export M2_HOME="/opt/maven"' >> /etc/profile.d/maven.sh
 echo 'export MAVEN_HOME="/opt/maven"' >> /etc/profile.d/maven.sh
 echo 'export PATH="${M2_HOME}/bin:${PATH}"' >> /etc/profile.d/maven.sh
@@ -58,12 +55,12 @@ apt-get purge -y snapd && apt-get install -y snapd
 if [[ $? -ne 0 ]] 
 then echo "FAILURE: Issues with snapd"; exit 1; fi
 
-apt-get install -y chromium-browser 
+apt-get install -y chromium
 if [[ $? -ne 0 ]] 
 then echo "FAILURE: Issues with Chromium install"; exit 1; fi
 
-echo "export CHROME_BIN=\"/snap/bin/chromium\"" >> /etc/bash.bashrc
-echo "export CHROME_BIN=\"/snap/bin/chromium\"" >> /etc/profile
+echo "export CHROME_BIN=\"/usr/bin/chromium\"" >> /etc/bash.bashrc
+echo "export CHROME_BIN=\"/usr/bin/chromium\"" >> /etc/profile
 
 # Setting up and starting Docker.
 usermod -a -G docker vagrant
@@ -117,20 +114,24 @@ SCRIPT
 Vagrant.configure("2") do |config|
 
   config.vm.define :devsecops do |devsecops|
-    devsecops.vm.provider "hyperv" do |v|
-      v.maxmemory = 4096       # Change to 6144 or 8192 if possible
-      v.memory = 4096          # Change to 6144 or 8192 if possible
-      v.cpus = 2               # Change to 4 or 6 if possible
-    end
-
     devsecops.vm.hostname = "devsecops"
-    devsecops.vm.box = "generic/ubuntu2204"
+    #devsecops.vm.box = "bento/ubuntu-22.04"   # This is used in all other hypervisors
+    devsecops.vm.box = "bento/debian-11"   # This is used in all other hypervisors
 
-    devsecops.vm.network "forwarded_port", guest: 631, host: 631
+    # Switch these two, if VirtualBox complains about "permission denied" on networking.
+    #devsecops.vm.network "private_network", ip: "192.168.56.11", virtualbox__intnet: "dsonet"
+    #devsecops.vm.network "private_network", ip: "192.168.56.11"
+    ###
+
+    #devsecops.vm.network "forwarded_port", guest: 631, host: 631
     devsecops.vm.network "forwarded_port", guest: 3000, host: 3000
     devsecops.vm.network "forwarded_port", guest: 4444, host: 4444
     devsecops.vm.network "forwarded_port", guest: 8834, host: 8834
 
+    devsecops.vm.provider "virtualbox" do |v|
+      v.memory = 4096          # Change to 6144, or 8192 if possible
+      v.cpus = 2               # Change to 4 or 6 if possible
+    end
     devsecops.vm.provision "setup", type: "shell", inline: $script
   end
 

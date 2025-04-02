@@ -29,7 +29,7 @@ Also, you may want to change your overall power management settings for the dura
 
 ## Creating the lab VM
 
-Then download the [Vagrantfile-VirtualBox-x86_64](https://github.com/unixerius/DSO/blob/readme-july/Lab%20setup/Vagrantfile-VirtualBox-x86_64) and put it in a separate folder. Rename the file to `Vagrantfile`. **The filename must literally be** `Vagrantfile`. No extensions.
+Then download the [Vagrantfile-VirtualBox-x86_64](https://github.com/unixerius/DSO/blob/main/Lab%20setup/Vagrantfile-VirtualBox-x86_64) and put it in a separate folder. Rename the file to `Vagrantfile`. **The filename must literally be** `Vagrantfile`. No extensions.
 
 In a terminal `cd` into that folder and run `vagrant up`.
 
