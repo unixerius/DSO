@@ -111,7 +111,7 @@ Vagrant.configure("2") do |config|
     devsecops.vm.hostname = "devsecops"
     devsecops.vm.box = "perk/ubuntu-2204-arm64"
 
-    devsecops.vm.network "forwarded_port", guest: 631, host: 631
+    devsecops.vm.network "forwarded_port", guest: 631, host: 6631
     devsecops.vm.network "forwarded_port", guest: 3000, host: 3000
     devsecops.vm.network "forwarded_port", guest: 4444, host: 4444
     devsecops.vm.network "forwarded_port", guest: 8834, host: 8834
