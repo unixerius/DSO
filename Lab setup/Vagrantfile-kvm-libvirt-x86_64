@@ -125,7 +125,6 @@ Vagrant.configure("2") do |config|
     devsecops.vm.network "forwarded_port", guest: 8834, host: 8834
 
     devsecops.vm.provider "libvirt" do |v|
-      v.gui    = false         # Set to true, to get the VM console
       v.memory = 4096          # Change to 6144, or 8192 if possible
       v.cpus = 2               # Change to 4 or 6 if possible
     end
