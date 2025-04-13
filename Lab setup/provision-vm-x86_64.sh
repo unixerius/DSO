@@ -9,8 +9,8 @@ echo "192.168.56.11   devsecops" >> /etc/hosts
 export MYHOME="/home/vagrant"
 
 # Installing pre-requisite software
-apt-get update
-apt-get install -y docker.io docker-compose git ripgrep pip python3 dos2unix
+apt update
+apt install -y docker.io docker-compose git ripgrep pip python3 dos2unix
 
 # Needed for the Cypres tests of JuiceShop
 apt install -y libgtk2.0-0 libgtk-3-0 libgbm-dev libnotify-dev libnss3 libxss1 libasound2 libxtst6 xauth xvfb
@@ -20,7 +20,7 @@ if [[ $? -ne 0 ]];
 then echo "FAILURE: Docker install failed."; exit 1; fi
 
 # Setting up Java and Maven, for Selenium
-apt-get install -y openjdk-17-jdk
+apt install -y openjdk-17-jdk
 cd ~
 wget https://dlcdn.apache.org/maven/maven-3/3.8.8/binaries/apache-maven-3.8.8-bin.tar.gz
 cd /opt
@@ -44,8 +44,8 @@ then echo "FAILURE: Maven install failed."; exit 1; fi
 [[ ! -d /etc/apt/keyrings ]] && mkdir /etc/apt/keyrings
 curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg
 echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_20.x nodistro main" > /etc/apt/sources.list.d/nodesource.list
-apt-get update
-apt-get install -y nodejs      # Fetching NodeJS 20 from NodeSource
+apt update
+apt install -y nodejs      # Fetching NodeJS 20 from NodeSource
 
 echo "NODE INSTALLED: $(node --version)"
 if [[ $(node --version | cut -d. -f1) != "v20" ]]
@@ -55,7 +55,7 @@ then echo "FAILURE: wrong Node version."; exit 1; fi
 npm install --location=global @angular/cli
 
 # Installing Chromium, for headless testing.
-apt-get install -y chromium
+apt install -y chromium
 echo "export CHROME_BIN=\"/usr/bin/chromium\"" >> /etc/bash.bashrc
 echo "export CHROME_BIN=\"/usr/bin/chromium\"" >> /etc/profile
 
