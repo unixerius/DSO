@@ -4,9 +4,51 @@
 
 [[ $(whoami) != "root" ]] && echo "You're not root." && exit 1
 
-echo "192.168.56.11   devsecops" >> /etc/hosts
+echo "127.0.0.1   devsecops" >> /etc/hosts
 
-export MYHOME="/home/vagrant"
+cat <<-EOF
+
+	---== !! IMPORTANT !! ==--
+
+This script will install a lot of software. It will also 
+setup a user account of your choice, so it can work with
+Docker and a few other things.
+
+Please enter the username of YOUR account on this VM. 
+
+EOF
+
+TargetUser=""
+
+while [[ -z ${TargetUser} ]]
+do
+    read -p "Your username: " TargetUser
+
+    if [[ -z $(getent passwd ${TargetUser}) ]]
+    then
+      echo "ERROR: The user with name ${TargetUser} does not exist."
+      TargetUser=""
+    fi
+done
+
+export MYHOME=$(getent passwd ${TargetUser} | cut -d: -f6)
+
+if [[ ! -d ${MYHOME} ]]
+then
+    echo "WARNING: It seems that the homedir of ${TargetUser} is not ${MYHOME}."
+    MYHOME=""
+
+    while [[ -z ${MYHOME} ]]
+    do
+      read -p "Your home directory: " MYHOME
+
+      if [[ ! -d ${MYHOME} ]]
+      then
+        echo "ERROR: ${MYHOME} is not a valid directory."
+        MYHOME=""
+      fi
+    done
+fi
 
 # Installing pre-requisite software
 apt update
@@ -57,7 +99,7 @@ echo "export CHROME_BIN=\"/usr/bin/chromium\"" >> /etc/bash.bashrc
 echo "export CHROME_BIN=\"/usr/bin/chromium\"" >> /etc/profile
 
 # Setting up and starting Docker.
-usermod -a -G docker vagrant
+usermod -a -G docker ${TargetUser}
 systemctl enable docker
 systemctl start docker
 docker pull hello-world
@@ -105,4 +147,4 @@ sed -i 's/latest-ubuntu/latest-oracle/g' ${MYHOME}/Nessus/docker-compose.yml
 docker pull ghcr.io/zaproxy/zaproxy:latest
 docker pull projectdiscovery/nuclei
 
-chown -R vagrant:vagrant ${MYHOME}
+chown -R ${TargetUser} ${MYHOME}
