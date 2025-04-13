@@ -5,7 +5,7 @@ export MYHOME="/home/vagrant"
 
 # Installing pre-requisite software
 apt-get update
-apt-get install -y docker.io docker-compose git ripgrep pip python3
+apt-get install -y docker.io docker-compose git ripgrep pip python3 dos2unix
 
 # Needed for the Cypres tests of JuiceShop
 apt install -y libgtk2.0-0 libgtk-3-0 libgbm-dev libnotify-dev libnss3 libxss1 libasound2 libxtst6 xauth xvfb
@@ -91,11 +91,13 @@ docker pull ghcr.io/google/osv-scanner:latest
 echo "Pulling semgrep container image"
 docker pull returntocorp/semgrep
 
-# Building Nessus container for ARM
-mkdir ${MYHOME}/nessus
-curl --request GET --url "https://raw.githubusercontent.com/unixerius/DSO/main/Nessus/nessus-docker-arm" --output "${MYHOME}/nessus/nessus-docker-arm"
+# Pulling Nessus image for day 5
+echo "Pulling Nessus Ubuntu container image"
+docker pull tenable/nessus:latest-oracle
+mkdir ${MYHOME}/Nessus
+curl --request GET --url "https://raw.githubusercontent.com/unixerius/DSO/main/Nessus/nessus-docker-compose.yml" --output "${MYHOME}/Nessus/docker-compose.yml"
 dos2unix ${MYHOME}/Nessus/*
-docker build -t nessus -f ${MYHOME}/nessus/nessus-docker-arm ${MYHOME}/nessus/
+sed -i 's/latest-ubuntu/latest-oracle/g' ${MYHOME}/Nessus/docker-compose.yml
 
 # Pulling zap2docker and Nuclei, which are big too
 echo "Pulling Zaproxy container image"
