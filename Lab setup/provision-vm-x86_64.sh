@@ -1,5 +1,6 @@
 #!/bin/bash
 # Run this script as root
+# Run this in a Debian 11 VM.
 
 [[ $(whoami) != "root" ]] && echo "You're not root." && exit 1
 
@@ -7,12 +8,9 @@ echo "192.168.56.11   devsecops" >> /etc/hosts
 
 export MYHOME="/home/vagrant"
 
-# Growing the root file system
-lvresize -r -l +40%VG /dev/ubuntu-vg/ubuntu-lv
-
 # Installing pre-requisite software
 apt-get update
-apt-get install -y docker.io docker-buildx docker-compose git ripgrep pip python3 dos2unix
+apt-get install -y docker.io docker-compose git ripgrep pip python3 dos2unix
 
 # Needed for the Cypres tests of JuiceShop
 apt install -y libgtk2.0-0 libgtk-3-0 libgbm-dev libnotify-dev libnss3 libxss1 libasound2 libxtst6 xauth xvfb
@@ -56,18 +54,10 @@ then echo "FAILURE: wrong Node version."; exit 1; fi
 # Installing Angular
 npm install --location=global @angular/cli
 
-# Installing Chromium, for headless testing. This uses Snapd
-# And on Hyper-V apparently snapd has a bug.
-apt-get purge -y snapd && apt-get install -y snapd
-if [[ $? -ne 0 ]] 
-then echo "FAILURE: Issues with snapd"; exit 1; fi
-
-apt-get install -y chromium-browser 
-if [[ $? -ne 0 ]] 
-then echo "FAILURE: Issues with Chromium install"; exit 1; fi
-
-echo "export CHROME_BIN=\"/snap/bin/chromium\"" >> /etc/bash.bashrc
-echo "export CHROME_BIN=\"/snap/bin/chromium\"" >> /etc/profile
+# Installing Chromium, for headless testing.
+apt-get install -y chromium
+echo "export CHROME_BIN=\"/usr/bin/chromium\"" >> /etc/bash.bashrc
+echo "export CHROME_BIN=\"/usr/bin/chromium\"" >> /etc/profile
 
 # Setting up and starting Docker.
 usermod -a -G docker vagrant

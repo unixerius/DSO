@@ -52,9 +52,9 @@ then echo "FAILURE: wrong Node version."; exit 1; fi
 npm install --location=global @angular/cli@16.2.14
 
 # Installing Chromium, for headless testing.
-apt install -y chromium-browser 
-echo "export CHROME_BIN=\"/snap/bin/chromium\"" >> /etc/bash.bashrc
-echo "export CHROME_BIN=\"/snap/bin/chromium\"" >> /etc/profile
+apt install -y chromium
+echo "export CHROME_BIN=\"/usr/bin/chromium\"" >> /etc/bash.bashrc
+echo "export CHROME_BIN=\"/usr/bin/chromium\"" >> /etc/profile
 
 # Setting up and starting Docker.
 usermod -a -G docker vagrant
