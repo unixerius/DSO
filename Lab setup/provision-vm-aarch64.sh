@@ -1,5 +1,6 @@
 #!/bin/bash
-# Run this script as root
+# Run this script as root.
+# Use this script in a Debian 11 VM.
 
 [[ $(whoami) != "root" ]] && echo "You're not root." && exit 1
 
