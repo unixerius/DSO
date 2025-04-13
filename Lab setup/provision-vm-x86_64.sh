@@ -12,7 +12,7 @@ lvresize -r -l +40%VG /dev/ubuntu-vg/ubuntu-lv
 
 # Installing pre-requisite software
 apt-get update
-apt-get install -y docker.io docker-buildx docker-compose git ripgrep pip python3
+apt-get install -y docker.io docker-buildx docker-compose git ripgrep pip python3 dos2unix
 
 # Needed for the Cypres tests of JuiceShop
 apt install -y libgtk2.0-0 libgtk-3-0 libgbm-dev libnotify-dev libnss3 libxss1 libasound2 libxtst6 xauth xvfb
