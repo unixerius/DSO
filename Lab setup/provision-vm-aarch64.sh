@@ -9,7 +9,7 @@ export MYHOME="/home/vagrant"
 
 # Installing pre-requisite software
 apt update
-apt install -y docker.io docker-buildx docker-compose git ripgrep pip python3 dos2unix
+apt install -y docker.io docker-compose git ripgrep pip python3 dos2unix
 
 which docker >/dev/null 2>&1 
 if [[ $? -ne 0 ]];
