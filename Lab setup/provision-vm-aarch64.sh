@@ -82,16 +82,16 @@ then echo "FAILURE: Maven install failed."; exit 1; fi
 # Installing NodeJS from outside sources.
 [[ ! -d /etc/apt/keyrings ]] && mkdir /etc/apt/keyrings
 curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg
-echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_16.x nodistro main" > /etc/apt/sources.list.d/nodesource.list
+echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_20.x nodistro main" > /etc/apt/sources.list.d/nodesource.list
 apt update
-apt install -y nodejs      # Fetching NodeJS 16 from NodeSource
+apt install -y nodejs      # Fetching NodeJS 20 from NodeSource
 
 echo "NODE INSTALLED: $(node --version)"
-if [[ $(node --version | cut -d. -f1) != "v16" ]]
+if [[ $(node --version | cut -d. -f1) != "v20" ]]
 then echo "FAILURE: wrong Node version."; exit 1; fi
 
 # Installing Angular
-npm install --location=global @angular/cli@16.2.14
+npm install --location=global @angular/cli
 
 # Installing Chromium, for headless testing.
 apt install -y chromium
