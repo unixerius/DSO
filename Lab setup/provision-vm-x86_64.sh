@@ -102,7 +102,7 @@ echo "export CHROME_BIN=\"/usr/bin/chromium\"" >> /etc/bash.bashrc
 echo "export CHROME_BIN=\"/usr/bin/chromium\"" >> /etc/profile
 
 # Setting up and starting Docker.
-usermod -a -G docker vagrant
+usermod -a -G docker ${TargetUser}
 systemctl enable docker
 systemctl start docker
 docker pull hello-world
@@ -143,4 +143,4 @@ docker pull ghcr.io/zaproxy/zaproxy:latest
 echo "Pulling Nuclei container image"
 docker pull projectdiscovery/nuclei
 
-chown -R vagrant:vagrant ${MYHOME}
+chown -R ${TargetUser} ${MYHOME}
