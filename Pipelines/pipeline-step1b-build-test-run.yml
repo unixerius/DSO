@@ -1,0 +1,103 @@
+variables:
+  # Used for container names and for webapp URLs
+  - name: 'team'
+    value: 'team1'
+  # DO NOT CHANGE THE FOLLOWING VARIABLES.
+  # ONLY CHANGE YOUR TEAM NAME, ABOVE HERE...
+  # Used to refer to AzDO service connection and to actual registry.
+  - name: 'registry'
+    value: 'unixeriusdso'
+  # Used for the WebApp Service
+  - name: 'webapp'
+    value: 'unixeriusdso-${{ variables.team }}'
+  # Used to deploy resources to Azure
+  - name: 'azuresub'
+    value: 'Azure Unixerius Learning'
+  # Should be re-defined in the DTAP phases / stages
+  - name: 'dtap'
+    value: 'dev'
+
+trigger:
+  - manual
+    
+pool:
+  vmImage: ubuntu-latest
+
+
+stages:
+- stage: test_application
+  condition: always()
+
+  jobs:
+  - job: run_cypress
+    steps:
+    - task: Bash@3
+      displayName: install_npm_dependencies
+      inputs:
+        targetType: 'inline'
+        script: |
+          npm install --omit=dev --unsafe-perm
+    - task: Bash@3
+      displayName: run_juiceshop
+      inputs:
+        targetType: 'inline'
+        script: |
+          npm start &
+    - task: Bash@3
+      displayName: run_cypress_tests
+      inputs:
+        targetType: 'inline'
+        script: |
+npx cypress run --config video=true << EOF
+y
+EOF
+    - publish: '.cypress/video.mp4'
+      artifact: cypress-video.mp4
+
+- stage: build_package
+  dependsOn:
+  - test_application
+  condition: always()
+  jobs:
+  - job: build_and_push_image
+    steps:
+    - task: Docker@2
+      inputs:
+        containerRegistry: ${{ variables.registry }}
+        command: 'login'
+    - task: Docker@2
+      inputs:
+        containerRegistry: ${{ variables.registry }}
+        repository: ${{ variables.team }}
+        command: 'buildAndPush'
+        Dockerfile: '**/Dockerfile'
+        tags: ${{ variables.dtap }}
+    - task: Docker@2
+      inputs:
+        containerRegistry: ${{ variables.registry }}
+        command: 'logout'
+
+- stage: run_webapp
+  dependsOn:
+  - test_application
+  - build_package
+  condition: always()
+  
+  jobs:
+  - job: update_appsvc_dev
+    steps:
+    - task: AzureWebAppContainer@1
+      displayName: update_webapp
+      inputs:
+        azureSubscription: ${{ variables.azuresub }}
+        appName: ${{ variables.webapp }}
+        containers: '${{ variables.registry }}.azurecr.io/${{ variables.team }}:${{ variables.dtap }}'
+        appSettings: '-Port 3000 -WEBSITES_PORT 3000'
+        configurationStrings: '-acrUseManagedIdentityCreds true'
+    
+    # Sleeping for five minutes. I have seen the restart take 10-12 minutes.
+    - task: Bash@3
+      displayName: sleep_and_wait
+      inputs:
+        targetType: 'inline'
+        script: 'sleep 300'
