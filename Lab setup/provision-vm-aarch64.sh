@@ -123,13 +123,6 @@ docker pull ghcr.io/google/osv-scanner:latest
 echo "Pulling semgrep container image"
 docker pull returntocorp/semgrep
 
-# Prepping Docker BuildX
-# From here https://gist.github.com/jniltinho/bcb28a99aef33dcb5f35c297bf71e4ae
-VERSION=v0.14.1
-mkdir -p ${MYHOME}/.docker/cli-plugins
-wget https://github.com/docker/buildx/releases/download/$VERSION/buildx-$VERSION.linux-arm64 -O ${MYHOME}/.docker/cli-plugins/docker-buildx
-chmod +x ${MYHOME}/.docker/cli-plugins/docker-buildx
-
 export DOCKER_BUILDKIT=1
 export COMPOSE_DOCKER_CLI_BUILD=1
 echo 'export DOCKER_BUILDKIT=1' >> ${MYHOME}/.profile
