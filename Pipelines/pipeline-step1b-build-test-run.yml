@@ -48,7 +48,7 @@ stages:
     - task: PublishBuildArtifacts@1
       displayName: publish_cypress_evidence
       inputs:
-        PathtoPublish: 'cypress/videos/login.spec.ts.mp4'
+        PathtoPublish: 'cypress/videos/e2e/login.spec.ts.mp4'
         artifact: login.spec.ts.mp4
     - task: PublishBuildArtifacts@1
       displayName: publish_cypress_evidence
