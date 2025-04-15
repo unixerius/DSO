@@ -38,21 +38,23 @@ stages:
         script: |
           npm install --omit=dev --unsafe-perm
     - task: Bash@3
-      displayName: run_juiceshop
+      displayName: run_and_test_juiceshop
       inputs:
         targetType: 'inline'
         script: |
           npm start &
-    - task: Bash@3
-      displayName: run_cypress_tests
+          sleep 5
+          npx cypress run --config video=true
+    - task: PublishBuildArtifacts@1
+      displayName: publish_cypress_evidence
       inputs:
-        targetType: 'inline'
-        script: |
-npx cypress run --config video=true << EOF
-y
-EOF
-    - publish: '.cypress/video.mp4'
-      artifact: cypress-video.mp4
+        PathtoPublish: 'cypress/videos/login.spec.ts.mp4'
+        artifact: login.spec.ts.mp4
+    - task: PublishBuildArtifacts@1
+      displayName: publish_cypress_evidence
+      inputs:
+        PathtoPublish: 'cypress/screenshots/'
+        artifact: screenshots
 
 - stage: build_package
   dependsOn:
