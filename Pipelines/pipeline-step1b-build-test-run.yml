@@ -36,7 +36,7 @@ stages:
       inputs:
         targetType: 'inline'
         script: |
-          npm install --omit=dev --unsafe-perm
+          npm install
     - task: Bash@3
       displayName: run_and_test_juiceshop
       inputs:
