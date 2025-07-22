@@ -17,10 +17,10 @@ then echo "FAILURE: Docker install failed."; exit 1; fi
 # Setting up Java and Maven, for Selenium
 apt install -y openjdk-17-jdk
 cd ~
-wget https://dlcdn.apache.org/maven/maven-3/3.8.8/binaries/apache-maven-3.8.8-bin.tar.gz
+wget https://dlcdn.apache.org/maven/maven-3/3.8.9/binaries/apache-maven-3.8.9-bin.tar.gz
 cd /opt
-tar zxvf ~/apache-maven-3.8.8-bin.tar.gz
-ln -s apache-maven-3.8.8 /opt/maven
+tar zxvf ~/apache-maven-3.8.9-bin.tar.gz
+ln -s apache-maven-3.8.9 /opt/maven
 cd ~; rm apache-maven*.tar.gz
 
 echo 'export JAVA_HOME="/usr/lib/jvm/java-17-openjdk-amd64/"' > /etc/profile.d/maven.sh
