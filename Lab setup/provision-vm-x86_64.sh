@@ -52,7 +52,7 @@ fi
 
 # Installing pre-requisite software
 apt update
-apt install -y docker.io docker-compose git ripgrep pip python3 dos2unix
+apt install -y curl docker.io docker-compose git ripgrep pip python3 dos2unix
 
 # Needed for the Cypres tests of JuiceShop
 apt install -y libgtk2.0-0 libgtk-3-0 libgbm-dev libnotify-dev libnss3 libxss1 libasound2 libxtst6 xauth xvfb
