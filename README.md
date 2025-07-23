@@ -31,7 +31,7 @@ Which instructions you follow, depends on your host OS (the operating system on 
 | Windows 10/11 | x86_64 / amd64    | HyperV<br />Vagrant<br />**Requires Win Pro or Edu | VirtualBox<br />Vagrant        |
 | Linux         | x86_64 / amd64    | VirtualBox<br />Vagrant               | KVM + LibVirt<br />Vagrant       |
 | MacOS         | x86_64            | Homebrew<br />VirtualBox<br />Vagrant | n.a.                           |
-| MacOS         | Silicon / aarch64 | Homebrew<br />Qemu<br />Vagrant       | Homebrew<br />UTM                |
+| MacOS         | Silicon / aarch64 | Homebrew<br />Qemu<br />Vagrant       | UTM                |
 
 *After installing the required software*, you must download a Vagrant configuration file as per the instructions. You will then use Vagrant to create the VM in your chosen virtualization tool. Vagrant will make the VM, download the OS and do all the software installations.
 
