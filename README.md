@@ -29,9 +29,9 @@ Which instructions you follow, depends on your host OS (the operating system on 
 | Laptop OS     | Architecture      | Recommended install                   | Fallback option                |
 | ------------- | ----------------- | ------------------------------------- | ------------------------------ |
 | Windows 10/11 | x86_64 / amd64    | HyperV<br />Vagrant<br />**Requires Win Pro or Edu | VirtualBox<br />Vagrant        |
-| Linux         | x86_64 / amd64    | VirtualBox<br />Vagrant               | n.a.                           |
+| Linux         | x86_64 / amd64    | VirtualBox<br />Vagrant               | KVM + LibVirt<br />Vagrant       |
 | MacOS         | x86_64            | Homebrew<br />VirtualBox<br />Vagrant | n.a.                           |
-| MacOS         | Silicon / aarch64 | Homebrew<br />Qemu<br />Vagrant       | Homebrew<br />UTM<br />Vagrant |
+| MacOS         | Silicon / aarch64 | Homebrew<br />Qemu<br />Vagrant       | Homebrew<br />UTM                |
 
 *After installing the required software*, you must download a Vagrant configuration file as per the instructions. You will then use Vagrant to create the VM in your chosen virtualization tool. Vagrant will make the VM, download the OS and do all the software installations.
 
@@ -40,8 +40,11 @@ Which instructions you follow, depends on your host OS (the operating system on 
 
 Follow ONE of the following sets of instructions, based on your choice from the table above.
 
+I advise you to NOT use VMWare on MacOS ARM; it does not play well with Vagrant at all.
+
 * [HyperV on Windows, with x86_64](https://github.com/unixerius/DSO/blob/main/Lab%20setup/HyperV-instructions.md)
 * [VirtualBox on Windows, MacOS or Linux, with x86_64](https://github.com/unixerius/DSO/blob/main/Lab%20setup/VirtualBox-instructions.md)
+* [KVM + LibVirt on Linux, with x86_64](https://github.com/unixerius/DSO/blob/main/Lab%20setup/KVM-Libvirt-instructions.md)
 * [Qemu on MacOS, with aarch64](https://github.com/unixerius/DSO/blob/main/Lab%20setup/Qemu-instructions.md)
 * [UTM on MacOS, with aarch64](https://github.com/unixerius/DSO/blob/main/Lab%20setup/UTM-instructions.md)
 
