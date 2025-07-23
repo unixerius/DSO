@@ -2,6 +2,8 @@
 
 For students with a modern Macintosh computer with Apple Silicon processor, who want a more user-friendly option than Qemu, we will go for VMWare Fusion.
 
+**I advise you to NOT use VMWare** on MacOS ARM; it does not play well with Vagrant at all.
+
 **Note:** You will need to register an account with Broadcom / VMware.
 
 ## Preparations for VMWare
