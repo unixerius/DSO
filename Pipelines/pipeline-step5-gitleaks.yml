@@ -92,7 +92,7 @@ stages:
       artifact: gitleaks-result.json
 
 - stage: build
-  condition: eq(variables['Build.SourceBranch'], 'refs/heads/main')
+  condition: always()
 
   jobs: 
   - job: build_and_push_image
