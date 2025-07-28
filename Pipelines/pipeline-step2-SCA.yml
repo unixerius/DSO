@@ -73,7 +73,7 @@ stages:
       artifact: osv-scanner.json
 
 - stage: build
-  condition: eq(variables['Build.SourceBranch'], 'refs/heads/main')
+  condition: always()
   jobs:        
   - job: build_and_push_image
     steps:
