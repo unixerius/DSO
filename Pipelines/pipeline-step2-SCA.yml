@@ -13,8 +13,8 @@ variables:
   # Used to deploy resources to Azure
   - name: 'azuresub'
     value: 'Azure Unixerius Learning'
-  # Should be re-defined in the DTAP phases / stages
-  - name: 'dtap'
+  # Used to tag the version of your team's container.
+  - name: 'release'
     value: 'dev'
 
 trigger:
@@ -87,7 +87,7 @@ stages:
         repository: ${{ variables.team }}
         command: 'buildAndPush'
         Dockerfile: '**/Dockerfile'
-        tags: ${{ variables.dtap }}
+        tags: ${{ variables.release }}
     - task: Docker@2
       inputs:
         containerRegistry: ${{ variables.registry }}
@@ -107,7 +107,7 @@ stages:
       inputs:
         azureSubscription: ${{ variables.azuresub }}
         appName: ${{ variables.webapp }}
-        containers: '${{ variables.registry }}.azurecr.io/${{ variables.team }}:${{ variables.dtap }}'
+        containers: '${{ variables.registry }}.azurecr.io/${{ variables.team }}:${{ variables.release }}'
         appSettings: '-Port 3000 -WEBSITES_PORT 3000'
         configurationStrings: '-acrUseManagedIdentityCreds true'
     
