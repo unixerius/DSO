@@ -5,11 +5,22 @@ export MYHOME="/home/vagrant"
 
 # Installing pre-requisite software
 apt update
-apt install -y curl docker.io docker-compose git ripgrep pip python3 dos2unix
+apt install -y curl docker.io docker-buildx docker-compose git ripgrep pip python3 dos2unix
 
 which docker >/dev/null 2>&1 
 if [[ $? -ne 0 ]];
 then echo "FAILURE: Docker install failed."; exit 1; fi
+
+# Prepping Docker BuildX
+# From here https://gist.github.com/jniltinho/bcb28a99aef33dcb5f35c297bf71e4ae
+VERSION=v0.14.1
+mkdir -p ${MYHOME}/.docker/cli-plugins
+wget https://github.com/docker/buildx/releases/download/$VERSION/buildx-$VERSION.linux-arm64 -O ${MYHOME}/.docker/cli-plugins/docker-buildx
+chmod +x ${MYHOME}/.docker/cli-plugins/docker-buildx
+
+export DOCKER_BUILDKIT=1
+export COMPOSE_DOCKER_CLI_BUILD=1
+echo 'export DOCKER_BUILDKIT=1' >> ${MYHOME}/.profile
 
 # Setting up Java and Maven, for Selenium
 apt install -y openjdk-17-jdk

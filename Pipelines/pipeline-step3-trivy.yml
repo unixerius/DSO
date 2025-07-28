@@ -13,8 +13,8 @@ variables:
   # Used to deploy resources to Azure
   - name: 'azuresub'
     value: 'Azure Unixerius Learning'
-  # Should be re-defined in the DTAP phases / stages
-  - name: 'dtap'
+  # Used to tag the version of your team's container.
+  - name: 'release'
     value: 'dev'
 
 trigger:
@@ -62,7 +62,7 @@ stages:
         repository: ${{ variables.team }}
         command: 'buildAndPush'
         Dockerfile: '**/Dockerfile'
-        tags: ${{ variables.dtap }}
+        tags: ${{ variables.release }}
     - task: Docker@2
       displayName: logout_acr
       inputs:
@@ -90,7 +90,7 @@ stages:
       displayName: install_trivy
       inputs:
         targetType: 'inline'
-        script: docker pull '${{ variables.registry }}.azurecr.io/${{ variables.team }}:${{ variables.dtap }}'
+        script: docker pull '${{ variables.registry }}.azurecr.io/${{ variables.team }}:${{ variables.release }}'
     - task: Docker@2
       displayName: logout_acr
       inputs:
@@ -101,7 +101,7 @@ stages:
       inputs:
         targetType: 'inline'
         script: |
-          trivy image -f json -o trivy-result.json '${{ variables.registry }}.azurecr.io/${{ variables.team }}:${{ variables.dtap }}'
+          trivy image -f json -o trivy-result.json '${{ variables.registry }}.azurecr.io/${{ variables.team }}:${{ variables.release }}'
     - publish: './trivy-result.json'
       artifact: trivy-result.json  
 
@@ -118,7 +118,7 @@ stages:
       inputs:
         azureSubscription: ${{ variables.azuresub }}
         appName: ${{ variables.webapp }}
-        containers: '${{ variables.registry }}.azurecr.io/${{ variables.team }}:${{ variables.dtap }}'
+        containers: '${{ variables.registry }}.azurecr.io/${{ variables.team }}:${{ variables.release }}'
         appSettings: '-Port 3000 -WEBSITES_PORT 3000'
         configurationStrings: '-acrUseManagedIdentityCreds true'
     
