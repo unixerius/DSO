@@ -5,7 +5,7 @@ For students with a modern Macintosh computer with Apple Silicon processor the e
 ## Preparations for Qemu
 
 1. [Download and Install Homebrew.](https://brew.sh)
-2. Install Vagrant and Qemu, by running `brew install -y qemu vagrant`.
+2. Install Vagrant and Qemu, by running `brew install qemu vagrant`.
 3. Install the Qemu plugin for Vagrant: `vagrant plugin install vagrant-qemu`
 
 ## Creating the lab VM
