@@ -2,11 +2,13 @@
 
 Students with an older MacOS system with an x86_64 processor (Intel or AMD), or using Linux, or using Windows 10/11 can use the *Vagrantfile-VirtualBox-x86_64* under "Lab setup".
 
+
 ## Preparations for VirtualBox
 
 * [Download and install Virtualbox](https://virtualbox.org) (version 6.x or 7.0, *not* 7.1).
 * [Download and install Vagrant](https://developer.hashicorp.com/vagrant/downloads?product_intent=vagrant)
 * Students on MacOS need to get [Homebrew](https://brew.sh) and install Vagrant using that.
+
 
 ## Ensure high performance for VirtualBox
 
@@ -27,6 +29,7 @@ The third command should include the "VBoxHeadless" and "VirtualBoxVM" processes
 
 Also, you may want to change your overall power management settings for the duration of this class. You can change these by opening the **Settings** app, then going into _Power & Battery > Power mode_ and setting it to "_Best Performance_".
 
+
 ## Creating the lab VM
 
 Then download the [Vagrantfile-VirtualBox-x86_64](https://github.com/unixerius/DSO/blob/main/Lab%20setup/Vagrantfile-VirtualBox-x86_64) and put it in a separate folder. Rename the file to `Vagrantfile`. **The filename must literally be** `Vagrantfile`. No extensions.
@@ -36,6 +39,21 @@ In a terminal `cd` into that folder and run `vagrant up`.
 This process will take about 10-15 minutes, depending on your Internet connection speed.
 
 [Here's a video that shows the process.](https://www.youtube.com/watch?v=DsEdfCggXlQ)
+
+
+## Windows: If Vagrant fails to work with VBoxmanage
+
+In some rare cases, Vagrant might not be able to properly find the `VBoxManage` CLI tool, which it uses to make VirtualBox configurations. Fixing this requires setting an environment variable.
+
+1. Use Windows' search, to open the "Control Panel" app.
+2. Go to "System and Security", then to System.
+3. Go to "Advanced System Settings".
+4. Click "Environment Variables...".
+5. Under System Variables click "New..."
+6. Set "Variable name" to "VBOX_INSTALL_PATH"
+7. Set "Variable value" to the path where VirtualBox is installed, for example  "C:\Program Files\Oracle\VirtualBox\".
+8. Select "OK" and close all the other settings windows.
+
 
 ## Logging into the VM
 
