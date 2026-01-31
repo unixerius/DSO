@@ -5,9 +5,13 @@ Students with an older MacOS system with an x86_64 processor (Intel or AMD), or 
 
 ## Preparations for VirtualBox
 
-* [Download and install Virtualbox](https://virtualbox.org) (version 6.x or 7.0, *not* 7.1).
+* [Download and install Virtualbox](https://virtualbox.org). 
 * [Download and install Vagrant](https://developer.hashicorp.com/vagrant/downloads?product_intent=vagrant)
-* Students on MacOS need to get [Homebrew](https://brew.sh) and install Vagrant using that.
+
+Notes:
+
+* If you already had VirtualBox and/or Vagrant installed, please updated to the latest versions.
+* Students on MacOS need to get [Homebrew](https://brew.sh) and install Vagrant using that. You will also use Homebrew to update to the latest version.
 
 
 ## Ensure high performance for VirtualBox
